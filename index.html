@@ -1,0 +1,2875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLID Principles & Design Patterns — A Visual Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0d11;
+    --bg2: #12151c;
+    --bg3: #1a1e2a;
+    --card: #1e2332;
+    --border: #2a2f42;
+    --accent1: #f7c948;   /* gold */
+    --accent2: #4fc3f7;   /* sky blue */
+    --accent3: #a78bfa;   /* violet */
+    --accent4: #34d399;   /* emerald */
+    --accent5: #fb7185;   /* rose */
+    --text: #e8eaf2;
+    --muted: #8b90a8;
+    --s-color: #f7c948;
+    --o-color: #4fc3f7;
+    --l-color: #a78bfa;
+    --i-color: #34d399;
+    --d-color: #fb7185;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'Lora', serif;
+    --font-code: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 30%, rgba(247,201,72,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 70%, rgba(79,195,247,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 50% 50%, rgba(167,139,250,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(247,201,72,0.12);
+    border: 1px solid rgba(247,201,72,0.3);
+    color: var(--accent1);
+    font-family: var(--font-head);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    animation: fadeInDown 0.6s ease both;
+  }
+  .hero h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2.8rem, 8vw, 6.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    animation: fadeInDown 0.7s ease 0.1s both;
+  }
+  .hero h1 span { color: var(--accent1); }
+  .hero-sub {
+    font-family: var(--font-head);
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 36px;
+    animation: fadeInDown 0.7s ease 0.2s both;
+  }
+  .solid-letters {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+    animation: fadeInDown 0.7s ease 0.3s both;
+  }
+  .solid-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 72px;
+  }
+  .solid-pill .letter {
+    width: 60px; height: 60px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-head);
+    font-size: 1.8rem;
+    font-weight: 800;
+    border: 2px solid;
+    transition: transform 0.2s;
+  }
+  .solid-pill .letter:hover { transform: translateY(-4px) scale(1.08); }
+  .solid-pill .label {
+    font-family: var(--font-head);
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-align: center;
+  }
+  .pill-s .letter { color: var(--s-color); border-color: var(--s-color); background: rgba(247,201,72,0.08); }
+  .pill-o .letter { color: var(--o-color); border-color: var(--o-color); background: rgba(79,195,247,0.08); }
+  .pill-l .letter { color: var(--l-color); border-color: var(--l-color); background: rgba(167,139,250,0.08); }
+  .pill-i .letter { color: var(--i-color); border-color: var(--i-color); background: rgba(52,211,153,0.08); }
+  .pill-d .letter { color: var(--d-color); border-color: var(--d-color); background: rgba(251,113,133,0.08); }
+
+  .nav-links {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    animation: fadeInDown 0.7s ease 0.4s both;
+  }
+  .nav-links a {
+    font-family: var(--font-head);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .nav-links a:hover { color: var(--text); border-color: var(--accent1); background: rgba(247,201,72,0.06); }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 60px;
+  }
+  .section-number {
+    font-family: var(--font-head);
+    font-size: 5rem;
+    font-weight: 800;
+    line-height: 1;
+    opacity: 0.08;
+    user-select: none;
+    min-width: 80px;
+  }
+  .section-title-wrap {}
+  .section-tag {
+    font-family: var(--font-head);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: var(--font-head);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .section-desc {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 620px;
+  }
+
+  /* ─── PRINCIPLE CARDS ─── */
+  .principle-block {
+    margin-bottom: 80px;
+    scroll-margin-top: 80px;
+  }
+  .principle-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .principle-badge {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-head);
+    font-size: 1.6rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    border: 2px solid;
+  }
+  .principle-badge.s { color: var(--s-color); border-color: var(--s-color); background: rgba(247,201,72,0.1); }
+  .principle-badge.o { color: var(--o-color); border-color: var(--o-color); background: rgba(79,195,247,0.1); }
+  .principle-badge.l { color: var(--l-color); border-color: var(--l-color); background: rgba(167,139,250,0.1); }
+  .principle-badge.i { color: var(--i-color); border-color: var(--i-color); background: rgba(52,211,153,0.1); }
+  .principle-badge.d { color: var(--d-color); border-color: var(--d-color); background: rgba(251,113,133,0.1); }
+
+  .principle-title-wrap {}
+  .principle-name {
+    font-family: var(--font-head);
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .principle-full {
+    font-family: var(--font-head);
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  .principle-intro {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .principle-intro::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 4px 0 0 4px;
+  }
+  .principle-intro.s::before { background: var(--s-color); }
+  .principle-intro.o::before { background: var(--o-color); }
+  .principle-intro.l::before { background: var(--l-color); }
+  .principle-intro.i::before { background: var(--i-color); }
+  .principle-intro.d::before { background: var(--d-color); }
+
+  .principle-quote {
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .principle-explain {
+    color: var(--muted);
+    font-size: 0.97rem;
+  }
+
+  /* ─── ANALOGY BOX ─── */
+  .analogy-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--bg3);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+  }
+  .analogy-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+  .analogy-label {
+    font-family: var(--font-head);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .analogy-text { font-size: 0.95rem; color: var(--text); }
+
+  /* ─── CODE TABS ─── */
+  .code-section-label {
+    font-family: var(--font-head);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .code-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .bad-good-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media(max-width: 680px) {
+    .bad-good-wrap { grid-template-columns: 1fr; }
+  }
+
+  .code-block {
+    background: #0d1117;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .code-block-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .code-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .code-block-title {
+    font-family: var(--font-head);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-left: auto;
+  }
+  .code-block.bad .code-block-title { color: #fb7185; }
+  .code-block.good .code-block-title { color: #34d399; }
+  .code-block.neutral .code-block-title { color: var(--accent2); }
+  .code-block.bad .code-dot { background: #fb7185; }
+  .code-block.good .code-dot { background: #34d399; }
+  .code-block.neutral .code-dot { background: var(--accent2); }
+
+  pre {
+    font-family: var(--font-code);
+    font-size: 0.78rem;
+    line-height: 1.65;
+    padding: 18px 20px;
+    overflow-x: auto;
+    color: #cdd9e5;
+    tab-size: 2;
+  }
+  /* Syntax highlight colors */
+  .kw { color: #ff7b72; }     /* keywords */
+  .cl { color: #79c0ff; }     /* class/type names */
+  .fn { color: #d2a8ff; }     /* function names */
+  .st { color: #a5d6ff; }     /* strings */
+  .cm { color: #8b949e; font-style: italic; }  /* comments */
+  .nm { color: #ffa657; }     /* numbers/constants */
+
+  /* ─── DIAGRAM BOXES ─── */
+  .diagram {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .diagram-title {
+    font-family: var(--font-head);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* ─── CLASS DIAGRAM ─── */
+  .class-node {
+    display: inline-flex;
+    flex-direction: column;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 150px;
+    font-family: var(--font-code);
+    font-size: 0.72rem;
+    text-align: left;
+  }
+  .class-node .cn-head {
+    background: var(--bg);
+    padding: 6px 12px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+  .class-node .cn-interface {
+    font-size: 0.6rem;
+    color: var(--muted);
+    display: block;
+    font-style: italic;
+  }
+  .class-node .cn-body { padding: 8px 12px; color: var(--muted); line-height: 1.8; }
+  .class-node .cn-method { color: var(--accent2); }
+  .class-node .cn-field { color: var(--accent4); }
+
+  .arrow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+  }
+  .arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .arrow .line {
+    width: 2px; height: 30px;
+    background: var(--border);
+  }
+  .arrow .head {
+    width: 0; height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+  }
+  .arrow.down .head { border-top: 10px solid var(--accent3); }
+  .arrow.up .head { border-bottom: 10px solid var(--accent3); }
+  .arrow-label {
+    font-family: var(--font-head);
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .h-arrow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+  .h-arrow {
+    display: flex;
+    align-items: center;
+  }
+  .h-arrow .line {
+    height: 2px; width: 36px;
+    background: var(--border);
+  }
+  .h-arrow .head {
+    width: 0; height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+  }
+  .h-arrow.right .head { border-left: 10px solid var(--accent2); }
+  .h-arrow.left .head { border-right: 10px solid var(--accent2); }
+
+  /* ─── VIOLATION CALLOUT ─── */
+  .callout {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .callout.warn {
+    background: rgba(251,113,133,0.08);
+    border: 1px solid rgba(251,113,133,0.25);
+    color: #fca5a5;
+  }
+  .callout.ok {
+    background: rgba(52,211,153,0.08);
+    border: 1px solid rgba(52,211,153,0.25);
+    color: #6ee7b7;
+  }
+  .callout.info {
+    background: rgba(79,195,247,0.08);
+    border: 1px solid rgba(79,195,247,0.25);
+    color: #7dd3fc;
+  }
+  .callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent);
+    margin: 0;
+  }
+
+  /* ─── DESIGN PATTERN SECTION ─── */
+  .dp-intro {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .dp-intro::before {
+    content: '{ }';
+    position: absolute;
+    right: 28px;
+    top: 20px;
+    font-family: var(--font-code);
+    font-size: 6rem;
+    font-weight: 700;
+    opacity: 0.04;
+    line-height: 1;
+    color: var(--accent2);
+  }
+  .dp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  @media(max-width: 640px) { .dp-grid { grid-template-columns: 1fr 1fr; } }
+  .dp-category {
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+  }
+  .dp-category-name {
+    font-family: var(--font-head);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+  }
+  .dp-category-items {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* ─── PATTERN BLOCK ─── */
+  .pattern-block {
+    margin-bottom: 80px;
+    scroll-margin-top: 80px;
+  }
+  .pattern-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .pattern-icon-box {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+    background: var(--card);
+  }
+  .pattern-title {
+    font-family: var(--font-head);
+    font-size: clamp(1.2rem, 3vw, 1.7rem);
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .pattern-meta {
+    font-family: var(--font-head);
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .pattern-solid-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-head);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid;
+    flex-shrink: 0;
+  }
+
+  /* ─── KEY INSIGHT ─── */
+  .key-insight {
+    background: linear-gradient(135deg, rgba(247,201,72,0.06) 0%, rgba(79,195,247,0.04) 100%);
+    border: 1px solid rgba(247,201,72,0.2);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-size: 0.92rem;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .key-insight .ki-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .key-insight strong { color: var(--accent1); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 60px 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  footer .heart { color: #fb7185; }
+  footer .name { color: var(--accent1); font-weight: 600; font-family: var(--font-head); }
+
+  /* ─── SCROLL NAV ─── */
+  .scroll-nav {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 100;
+  }
+  .scroll-nav a {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    display: block;
+    transition: all 0.2s;
+    text-decoration: none;
+    position: relative;
+  }
+  .scroll-nav a:hover { background: var(--accent1); transform: scale(1.4); }
+  .scroll-nav a .dot-label {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    font-family: var(--font-head);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text);
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .scroll-nav a:hover .dot-label { opacity: 1; }
+  @media(max-width: 768px) { .scroll-nav { display: none; } }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── UTILITY ─── */
+  .tag {
+    display: inline-block;
+    font-family: var(--font-head);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 3px 9px;
+    border-radius: 5px;
+    border: 1px solid;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .tag.cpp { color: #79c0ff; border-color: rgba(121,192,255,0.3); background: rgba(121,192,255,0.06); }
+  .tag.java { color: #ffa657; border-color: rgba(255,166,87,0.3); background: rgba(255,166,87,0.06); }
+
+  .full-code-block { margin-bottom: 24px; }
+
+  .mnemonic {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    justify-content: center;
+  }
+  .mnemo-letter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .mnemo-char {
+    font-family: var(--font-head);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .mnemo-word {
+    font-family: var(--font-head);
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* code single block */
+  .full-code-block .code-block { width: 100%; }
+
+  /* node connected */
+  .node-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    row-gap: 16px;
+  }
+
+  .interface-node {
+    display: inline-flex;
+    flex-direction: column;
+    background: rgba(167,139,250,0.08);
+    border: 1.5px dashed var(--l-color);
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 140px;
+    font-family: var(--font-code);
+    font-size: 0.72rem;
+    text-align: left;
+  }
+  .interface-node .cn-head {
+    background: rgba(167,139,250,0.1);
+    padding: 6px 12px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    border-bottom: 1px dashed rgba(167,139,250,0.4);
+    text-align: center;
+    color: var(--l-color);
+  }
+  .interface-node .cn-body { padding: 8px 12px; color: var(--muted); line-height: 1.8; }
+
+  .abstract-node {
+    display: inline-flex;
+    flex-direction: column;
+    background: rgba(79,195,247,0.08);
+    border: 1.5px solid var(--o-color);
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 140px;
+    font-family: var(--font-code);
+    font-size: 0.72rem;
+    text-align: left;
+  }
+  .abstract-node .cn-head {
+    background: rgba(79,195,247,0.1);
+    padding: 6px 12px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    border-bottom: 1px solid rgba(79,195,247,0.3);
+    text-align: center;
+    color: var(--o-color);
+  }
+  .abstract-node .cn-body { padding: 8px 12px; color: var(--muted); line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<!-- SCROLL NAV -->
+<nav class="scroll-nav" aria-label="Section navigation">
+  <a href="#srp"><span class="dot-label">S — Single Responsibility</span></a>
+  <a href="#ocp"><span class="dot-label">O — Open/Closed</span></a>
+  <a href="#lsp"><span class="dot-label">L — Liskov Substitution</span></a>
+  <a href="#isp"><span class="dot-label">I — Interface Segregation</span></a>
+  <a href="#dip"><span class="dot-label">D — Dependency Inversion</span></a>
+  <a href="#patterns"><span class="dot-label">Design Patterns</span></a>
+</nav>
+
+<!-- ═══════════════════════════════ HERO ════════════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hero-badge">A Visual Deep Dive for Starters</div>
+  <h1>SOLID &amp; <span>Design</span><br>Patterns</h1>
+  <p class="hero-sub">Master the five pillars of clean code — then see them in the wild.</p>
+
+  <div class="solid-letters">
+    <div class="solid-pill pill-s">
+      <div class="letter">S</div>
+      <div class="label">Single<br>Resp.</div>
+    </div>
+    <div class="solid-pill pill-o">
+      <div class="letter">O</div>
+      <div class="label">Open/<br>Closed</div>
+    </div>
+    <div class="solid-pill pill-l">
+      <div class="letter">L</div>
+      <div class="label">Liskov<br>Subst.</div>
+    </div>
+    <div class="solid-pill pill-i">
+      <div class="letter">I</div>
+      <div class="label">Interface<br>Seg.</div>
+    </div>
+    <div class="solid-pill pill-d">
+      <div class="letter">D</div>
+      <div class="label">Dep.<br>Inversion</div>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <a href="#srp">Single Responsibility</a>
+    <a href="#ocp">Open / Closed</a>
+    <a href="#lsp">Liskov Substitution</a>
+    <a href="#isp">Interface Segregation</a>
+    <a href="#dip">Dependency Inversion</a>
+    <a href="#patterns">Design Patterns</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ WHAT IS SOLID ════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-number">00</div>
+    <div class="section-title-wrap">
+      <div class="section-tag" style="color:var(--accent1)">Foundation</div>
+      <h2 class="section-title">What are SOLID Principles?</h2>
+      <p class="section-desc">SOLID is a set of five design principles coined by Robert C. Martin (Uncle Bob) that make object-oriented software easier to understand, maintain, and extend.</p>
+    </div>
+  </div>
+
+  <div class="analogy-box">
+    <div class="analogy-icon">🏗️</div>
+    <div>
+      <div class="analogy-label">Real-World Analogy</div>
+      <div class="analogy-text">Think of SOLID like engineering rules for a skyscraper. Each floor must carry its own weight (SRP), new floors shouldn't require rebuilding the foundation (OCP), each elevator must behave like an elevator (LSP), don't force tenants to use a huge master key for every door (ISP), and electricity wiring must not depend on which specific appliance is plugged in (DIP).</div>
+    </div>
+  </div>
+
+  <div class="mnemonic">
+    <div class="mnemo-letter"><div class="mnemo-char" style="color:var(--s-color)">S</div><div class="mnemo-word">Single</div></div>
+    <div class="mnemo-letter"><div class="mnemo-char" style="color:var(--muted)">·</div></div>
+    <div class="mnemo-letter"><div class="mnemo-char" style="color:var(--o-color)">O</div><div class="mnemo-word">Open</div></div>
+    <div class="mnemo-letter"><div class="mnemo-char" style="color:var(--muted)">·</div></div>
+    <div class="mnemo-letter"><div class="mnemo-char" style="color:var(--l-color)">L</div><div class="mnemo-word">Liskov</div></div>
+    <div class="mnemo-letter"><div class="mnemo-char" style="color:var(--muted)">·</div></div>
+    <div class="mnemo-letter"><div class="mnemo-char" style="color:var(--i-color)">I</div><div class="mnemo-word">Interface</div></div>
+    <div class="mnemo-letter"><div class="mnemo-char" style="color:var(--muted)">·</div></div>
+    <div class="mnemo-letter"><div class="mnemo-char" style="color:var(--d-color)">D</div><div class="mnemo-word">Dependency</div></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">💡</div>
+    <div>These principles are language-agnostic but shine brightest in object-oriented languages like <strong>Java</strong> and <strong>C++</strong>. Every example below will show both languages side by side.</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ S — SRP ════════════════════════════════ -->
+<section class="section" id="srp">
+  <div class="section-header">
+    <div class="section-number" style="color:var(--s-color)">01</div>
+    <div class="section-title-wrap">
+      <div class="section-tag" style="color:var(--s-color)">S — Single Responsibility Principle</div>
+      <h2 class="section-title">One Class,<br>One Job.</h2>
+    </div>
+  </div>
+
+  <div class="principle-block">
+    <div class="principle-intro s">
+      <div class="principle-quote">"A class should have one, and only one, reason to change."</div>
+      <div class="principle-explain">If a class handles multiple responsibilities, a change in one area can break unrelated functionality. Each class should encapsulate a single, well-defined concern of the system.</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">👨‍🍳</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">A chef only cooks. They don't also handle billing, clean the floor, and manage payroll. If the restaurant wants to change the billing system, that change should not affect the chef at all.</div>
+      </div>
+    </div>
+
+    <!-- Diagram -->
+    <div class="diagram">
+      <div class="diagram-title">Class Responsibility Mapping</div>
+      <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; align-items:flex-start;">
+        <!-- Bad -->
+        <div>
+          <div style="font-family:var(--font-head);font-size:0.7rem;color:#fb7185;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">❌ Violates SRP</div>
+          <div class="class-node" style="border-color:#fb7185; min-width:200px;">
+            <div class="cn-head" style="color:#fb7185;">Employee</div>
+            <div class="cn-body">
+              <div class="cn-field">name, salary, dept</div>
+              <div style="margin-top:6px;border-top:1px solid var(--border);padding-top:6px;">
+                <div class="cn-method">calculatePay()</div>
+                <div class="cn-method">saveToDatabase()</div>
+                <div class="cn-method">generateReport()</div>
+                <div class="cn-method">sendEmail()</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:8px;">4 different reasons to change!</div>
+        </div>
+
+        <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--muted);padding-top:40px;">→</div>
+
+        <!-- Good -->
+        <div>
+          <div style="font-family:var(--font-head);font-size:0.7rem;color:#34d399;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">✅ Follows SRP</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+            <div class="class-node" style="border-color:#34d399; min-width:130px;">
+              <div class="cn-head" style="color:#34d399;">Employee</div>
+              <div class="cn-body">
+                <div class="cn-field">name, salary</div>
+                <div class="cn-method">getDetails()</div>
+              </div>
+            </div>
+            <div class="class-node" style="border-color:#34d399; min-width:130px;">
+              <div class="cn-head" style="color:#34d399;">PayCalculator</div>
+              <div class="cn-body">
+                <div class="cn-method">calculatePay()</div>
+              </div>
+            </div>
+            <div class="class-node" style="border-color:#34d399; min-width:130px;">
+              <div class="cn-head" style="color:#34d399;">EmployeeRepo</div>
+              <div class="cn-body">
+                <div class="cn-method">save()</div>
+                <div class="cn-method">findById()</div>
+              </div>
+            </div>
+            <div class="class-node" style="border-color:#34d399; min-width:130px;">
+              <div class="cn-head" style="color:#34d399;">ReportService</div>
+              <div class="cn-body">
+                <div class="cn-method">generate()</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:8px;">Each class has exactly 1 reason to change</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code examples -->
+    <div class="code-section-label" style="color:var(--s-color)">
+      <span>❌ Violation Example</span>
+    </div>
+    <div class="bad-good-wrap">
+      <div class="code-block bad">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">BAD — Java</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// One class doing TOO many things</span>
+<span class="kw">class</span> <span class="cl">Employee</span> {
+    <span class="kw">private</span> String name;
+    <span class="kw">private</span> <span class="kw">double</span> salary;
+
+    <span class="cm">// Business logic</span>
+    <span class="kw">public double</span> <span class="fn">calculatePay</span>() {
+        <span class="kw">return</span> salary * <span class="nm">1.2</span>;
+    }
+
+    <span class="cm">// Database concern</span>
+    <span class="kw">public void</span> <span class="fn">saveToDatabase</span>() {
+        <span class="cm">// SQL insert logic here</span>
+    }
+
+    <span class="cm">// Reporting concern</span>
+    <span class="kw">public</span> String <span class="fn">generateReport</span>() {
+        <span class="kw">return</span> <span class="st">"Report for: "</span> + name;
+    }
+}
+<span class="cm">// If DB schema changes → modify Employee
+// If report format changes → modify Employee
+// Fragile!</span></pre>
+      </div>
+      <div class="code-block bad">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">BAD — C++</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="cm">// Same violation in C++</span>
+<span class="kw">class</span> <span class="cl">Employee</span> {
+<span class="kw">public</span>:
+    std::string name;
+    <span class="kw">double</span> salary;
+
+    <span class="cm">// Business logic</span>
+    <span class="kw">double</span> <span class="fn">calculatePay</span>() {
+        <span class="kw">return</span> salary * <span class="nm">1.2</span>;
+    }
+
+    <span class="cm">// Database concern</span>
+    <span class="kw">void</span> <span class="fn">saveToDatabase</span>() {
+        <span class="cm">// SQL insert logic here</span>
+    }
+
+    <span class="cm">// Report concern</span>
+    std::string <span class="fn">generateReport</span>() {
+        <span class="kw">return</span> <span class="st">"Report: "</span> + name;
+    }
+};</pre>
+      </div>
+    </div>
+
+    <div class="code-section-label" style="color:var(--s-color)">
+      <span>✅ Correct Implementation</span>
+    </div>
+    <div class="bad-good-wrap">
+      <div class="code-block good">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">GOOD — Java</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// Each class has ONE clear responsibility</span>
+<span class="kw">class</span> <span class="cl">Employee</span> {
+    <span class="kw">private</span> String name;
+    <span class="kw">private double</span> salary;
+
+    <span class="kw">public</span> String <span class="fn">getName</span>() { <span class="kw">return</span> name; }
+    <span class="kw">public double</span> <span class="fn">getSalary</span>() { <span class="kw">return</span> salary; }
+}
+
+<span class="cm">// Handles ONLY pay calculation</span>
+<span class="kw">class</span> <span class="cl">PayCalculator</span> {
+    <span class="kw">public double</span> <span class="fn">calculate</span>(<span class="cl">Employee</span> emp) {
+        <span class="kw">return</span> emp.getSalary() * <span class="nm">1.2</span>;
+    }
+}
+
+<span class="cm">// Handles ONLY persistence</span>
+<span class="kw">class</span> <span class="cl">EmployeeRepository</span> {
+    <span class="kw">public void</span> <span class="fn">save</span>(<span class="cl">Employee</span> emp) {
+        <span class="cm">// SQL insert logic</span>
+    }
+}
+
+<span class="cm">// Handles ONLY reporting</span>
+<span class="kw">class</span> <span class="cl">ReportService</span> {
+    <span class="kw">public</span> String <span class="fn">generate</span>(<span class="cl">Employee</span> emp) {
+        <span class="kw">return</span> <span class="st">"Report for: "</span> + emp.getName();
+    }
+}</pre>
+      </div>
+      <div class="code-block good">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">GOOD — C++</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="kw">class</span> <span class="cl">Employee</span> {
+<span class="kw">public</span>:
+    std::string name;
+    <span class="kw">double</span> salary;
+};
+
+<span class="kw">class</span> <span class="cl">PayCalculator</span> {
+<span class="kw">public</span>:
+    <span class="kw">double</span> <span class="fn">calculate</span>(<span class="kw">const</span> <span class="cl">Employee</span>&amp; e) {
+        <span class="kw">return</span> e.salary * <span class="nm">1.2</span>;
+    }
+};
+
+<span class="kw">class</span> <span class="cl">EmployeeRepository</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">save</span>(<span class="kw">const</span> <span class="cl">Employee</span>&amp; e) {
+        <span class="cm">// persist to DB</span>
+    }
+};
+
+<span class="kw">class</span> <span class="cl">ReportService</span> {
+<span class="kw">public</span>:
+    std::string <span class="fn">generate</span>(<span class="kw">const</span> <span class="cl">Employee</span>&amp; e) {
+        <span class="kw">return</span> <span class="st">"Report: "</span> + e.name;
+    }
+};</pre>
+      </div>
+    </div>
+
+    <div class="callout ok">
+      <div class="callout-icon">✅</div>
+      <div><strong>Key Takeaway:</strong> Ask yourself — "How many reasons could cause this class to change?" If the answer is more than one, split it up. Each class should own one clearly named concern.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ O — OCP ════════════════════════════════ -->
+<section class="section" id="ocp">
+  <div class="section-header">
+    <div class="section-number" style="color:var(--o-color)">02</div>
+    <div class="section-title-wrap">
+      <div class="section-tag" style="color:var(--o-color)">O — Open/Closed Principle</div>
+      <h2 class="section-title">Open for Extension,<br>Closed for Modification.</h2>
+    </div>
+  </div>
+
+  <div class="principle-block">
+    <div class="principle-intro o">
+      <div class="principle-quote">"Software entities should be open for extension, but closed for modification."</div>
+      <div class="principle-explain">Once a class is tested and working, you should be able to add new behaviour without touching existing code. This prevents regressions and keeps the system stable.</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">🔌</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">A power strip is closed for modification (you don't rewire it), but open for extension — you can plug in a fan, a phone charger, or a lamp at any time without changing the power strip itself.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">OCP — Extension via Abstraction</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <!-- Interface at top -->
+        <div class="interface-node" style="min-width:200px;">
+          <div class="cn-head">«interface»<br>Shape</div>
+          <div class="cn-body"><div class="cn-method">+ area(): double</div></div>
+        </div>
+        <!-- Arrow down to implementations -->
+        <div style="display:flex;gap:60px;align-items:flex-start;margin-top:4px;">
+          <div class="arrow down"><div class="line"></div><div class="head"></div></div>
+          <div class="arrow down"><div class="line"></div><div class="head"></div></div>
+          <div class="arrow down"><div class="line"></div><div class="head"></div></div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+          <div class="class-node" style="min-width:120px;">
+            <div class="cn-head">Circle</div>
+            <div class="cn-body"><div class="cn-field">radius</div><div class="cn-method">area()</div></div>
+          </div>
+          <div class="class-node" style="min-width:120px;">
+            <div class="cn-head">Rectangle</div>
+            <div class="cn-body"><div class="cn-field">w, h</div><div class="cn-method">area()</div></div>
+          </div>
+          <div class="class-node" style="min-width:120px; border-color:var(--accent1);">
+            <div class="cn-head" style="color:var(--accent1);">Triangle ✨</div>
+            <div class="cn-body"><div class="cn-field">base, h</div><div class="cn-method">area()</div></div>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-top:12px;">Adding Triangle never modifies existing Shape, Circle, or Rectangle classes</div>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block bad">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">BAD — Java</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// Adding a new shape = modifying this class!</span>
+<span class="kw">class</span> <span class="cl">AreaCalculator</span> {
+    <span class="kw">public double</span> <span class="fn">area</span>(Object shape) {
+        <span class="kw">if</span> (shape <span class="kw">instanceof</span> <span class="cl">Circle</span>) {
+            <span class="cl">Circle</span> c = (<span class="cl">Circle</span>) shape;
+            <span class="kw">return</span> Math.PI * c.radius * c.radius;
+        } <span class="kw">else if</span> (shape <span class="kw">instanceof</span> <span class="cl">Rectangle</span>) {
+            <span class="cl">Rectangle</span> r = (<span class="cl">Rectangle</span>) shape;
+            <span class="kw">return</span> r.width * r.height;
+        }
+        <span class="cm">// Want Triangle? Modify this class!
+        // Every new shape = risk breaking old ones</span>
+        <span class="kw">return</span> <span class="nm">0</span>;
+    }
+}</pre>
+      </div>
+      <div class="code-block bad">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">BAD — C++</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="kw">class</span> <span class="cl">AreaCalculator</span> {
+<span class="kw">public</span>:
+    <span class="kw">double</span> <span class="fn">area</span>(<span class="kw">const</span> std::string&amp; type,
+                <span class="kw">double</span> a, <span class="kw">double</span> b = <span class="nm">0</span>) {
+        <span class="kw">if</span> (type == <span class="st">"circle"</span>)
+            <span class="kw">return</span> <span class="nm">3.14</span> * a * a;
+        <span class="kw">else if</span> (type == <span class="st">"rectangle"</span>)
+            <span class="kw">return</span> a * b;
+        <span class="cm">// Adding triangle = modify here!</span>
+        <span class="kw">return</span> <span class="nm">0</span>;
+    }
+};</pre>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block good">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">GOOD — Java</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// Interface is CLOSED. Implementations are OPEN.</span>
+<span class="kw">interface</span> <span class="cl">Shape</span> {
+    <span class="kw">double</span> <span class="fn">area</span>();
+}
+
+<span class="kw">class</span> <span class="cl">Circle</span> <span class="kw">implements</span> <span class="cl">Shape</span> {
+    <span class="kw">private double</span> radius;
+    <span class="kw">public</span> <span class="cl">Circle</span>(<span class="kw">double</span> r) { <span class="kw">this</span>.radius = r; }
+
+    <span class="kw">public double</span> <span class="fn">area</span>() {
+        <span class="kw">return</span> Math.PI * radius * radius;
+    }
+}
+
+<span class="kw">class</span> <span class="cl">Rectangle</span> <span class="kw">implements</span> <span class="cl">Shape</span> {
+    <span class="kw">private double</span> w, h;
+    <span class="kw">public</span> <span class="cl">Rectangle</span>(<span class="kw">double</span> w, <span class="kw">double</span> h)
+        { <span class="kw">this</span>.w=w; <span class="kw">this</span>.h=h; }
+
+    <span class="kw">public double</span> <span class="fn">area</span>() { <span class="kw">return</span> w * h; }
+}
+
+<span class="cm">// Adding Triangle? Zero existing code modified!</span>
+<span class="kw">class</span> <span class="cl">Triangle</span> <span class="kw">implements</span> <span class="cl">Shape</span> {
+    <span class="kw">private double</span> base, height;
+    <span class="kw">public double</span> <span class="fn">area</span>() {
+        <span class="kw">return</span> <span class="nm">0.5</span> * base * height;
+    }
+}
+
+<span class="kw">class</span> <span class="cl">AreaCalculator</span> {
+    <span class="kw">public double</span> <span class="fn">total</span>(List&lt;<span class="cl">Shape</span>&gt; shapes) {
+        <span class="kw">return</span> shapes.stream()
+            .mapToDouble(<span class="cl">Shape</span>::area).sum();
+    }
+}</pre>
+      </div>
+      <div class="code-block good">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">GOOD — C++</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="kw">class</span> <span class="cl">Shape</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual double</span> <span class="fn">area</span>() <span class="kw">const</span> = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">Shape</span>() = <span class="kw">default</span>;
+};
+
+<span class="kw">class</span> <span class="cl">Circle</span> : <span class="kw">public</span> <span class="cl">Shape</span> {
+    <span class="kw">double</span> radius;
+<span class="kw">public</span>:
+    <span class="cl">Circle</span>(<span class="kw">double</span> r) : radius(r) {}
+    <span class="kw">double</span> <span class="fn">area</span>() <span class="kw">const override</span> {
+        <span class="kw">return</span> <span class="nm">3.14159</span> * radius * radius;
+    }
+};
+
+<span class="kw">class</span> <span class="cl">Rectangle</span> : <span class="kw">public</span> <span class="cl">Shape</span> {
+    <span class="kw">double</span> w, h;
+<span class="kw">public</span>:
+    <span class="cl">Rectangle</span>(<span class="kw">double</span> w, <span class="kw">double</span> h): w(w),h(h){}
+    <span class="kw">double</span> <span class="fn">area</span>() <span class="kw">const override</span> { <span class="kw">return</span> w*h; }
+};
+
+<span class="cm">// New shape — zero old code touched!</span>
+<span class="kw">class</span> <span class="cl">Triangle</span> : <span class="kw">public</span> <span class="cl">Shape</span> {
+    <span class="kw">double</span> base, height;
+<span class="kw">public</span>:
+    <span class="cl">Triangle</span>(<span class="kw">double</span> b, <span class="kw">double</span> h):base(b),height(h){}
+    <span class="kw">double</span> <span class="fn">area</span>() <span class="kw">const override</span> {
+        <span class="kw">return</span> <span class="nm">0.5</span> * base * height;
+    }
+};</pre>
+      </div>
+    </div>
+
+    <div class="callout ok">
+      <div class="callout-icon">✅</div>
+      <div><strong>Key Takeaway:</strong> Use <strong>interfaces</strong> (Java) or <strong>abstract classes / pure virtual functions</strong> (C++) to define contracts. New behaviour is added via new classes, not by editing stable ones.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ L — LSP ════════════════════════════════ -->
+<section class="section" id="lsp">
+  <div class="section-header">
+    <div class="section-number" style="color:var(--l-color)">03</div>
+    <div class="section-title-wrap">
+      <div class="section-tag" style="color:var(--l-color)">L — Liskov Substitution Principle</div>
+      <h2 class="section-title">Subtypes Must Be<br>Substitutable.</h2>
+    </div>
+  </div>
+
+  <div class="principle-block">
+    <div class="principle-intro l">
+      <div class="principle-quote">"Objects of a subclass should be replaceable with objects of the parent class without breaking the application."</div>
+      <div class="principle-explain">A child class must honour the full contract of its parent. If you replace a parent object with a child object, nothing should break — no exceptions thrown unexpectedly, no weakened guarantees.</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">🐦</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">If you have a function that accepts any Bird and calls fly(), then a Penguin (which can't fly) violates LSP if it's a subtype of Bird. You'd need to restructure: FlyingBird and non-flying Bird are separate abstractions.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">LSP Violation → Redesign</div>
+      <div style="display:flex;gap:40px;justify-content:center;flex-wrap:wrap;align-items:flex-start;">
+        <div>
+          <div style="font-family:var(--font-head);font-size:0.7rem;color:#fb7185;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">❌ Violates LSP</div>
+          <div class="class-node" style="border-color:#fb7185;min-width:160px;">
+            <div class="cn-head" style="color:#fb7185;">Bird</div>
+            <div class="cn-body"><div class="cn-method">fly() ← abstract</div></div>
+          </div>
+          <div class="arrow down" style="margin:8px auto;"><div class="line"></div><div class="head"></div></div>
+          <div class="class-node" style="border-color:#fb7185;min-width:160px;">
+            <div class="cn-head" style="color:#fb7185;">Penguin extends Bird</div>
+            <div class="cn-body"><div class="cn-method" style="color:#fb7185;">fly() → throws! 💥</div></div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--muted);padding-top:60px;">→</div>
+
+        <div>
+          <div style="font-family:var(--font-head);font-size:0.7rem;color:#34d399;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">✅ Follows LSP</div>
+          <div class="class-node" style="min-width:160px;">
+            <div class="cn-head">Bird</div>
+            <div class="cn-body"><div class="cn-method">eat(), sleep()</div></div>
+          </div>
+          <div style="display:flex;gap:30px;margin-top:8px;justify-content:center;">
+            <div>
+              <div class="arrow down" style="margin:0 auto;"><div class="line"></div><div class="head"></div></div>
+              <div class="class-node" style="border-color:#34d399;min-width:120px;">
+                <div class="cn-head" style="color:#34d399;">FlyingBird</div>
+                <div class="cn-body"><div class="cn-method">fly()</div></div>
+              </div>
+            </div>
+            <div>
+              <div class="arrow down" style="margin:0 auto;"><div class="line"></div><div class="head"></div></div>
+              <div class="class-node" style="border-color:#34d399;min-width:120px;">
+                <div class="cn-head" style="color:#34d399;">Penguin</div>
+                <div class="cn-body"><div class="cn-method">swim()</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block bad">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">BAD — Java</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="kw">class</span> <span class="cl">Bird</span> {
+    <span class="kw">public void</span> <span class="fn">fly</span>() {
+        System.out.println(<span class="st">"Flying!"</span>);
+    }
+}
+
+<span class="cm">// Penguin IS-A Bird but CAN'T fly
+// Violates LSP — breaks the parent contract!</span>
+<span class="kw">class</span> <span class="cl">Penguin</span> <span class="kw">extends</span> <span class="cl">Bird</span> {
+    <span class="kw">@Override</span>
+    <span class="kw">public void</span> <span class="fn">fly</span>() {
+        <span class="kw">throw new</span> <span class="cl">UnsupportedOperationException</span>(
+            <span class="st">"Penguins can't fly!"</span>);
+    }
+}
+
+<span class="cm">// Caller expects any Bird to fly</span>
+<span class="kw">void</span> <span class="fn">makeBirdFly</span>(<span class="cl">Bird</span> b) {
+    b.fly(); <span class="cm">// 💥 CRASHES if b is Penguin</span>
+}</pre>
+      </div>
+      <div class="code-block good">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">GOOD — Java</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="kw">interface</span> <span class="cl">Bird</span> {
+    <span class="kw">void</span> <span class="fn">eat</span>();
+}
+
+<span class="kw">interface</span> <span class="cl">FlyingBird</span> <span class="kw">extends</span> <span class="cl">Bird</span> {
+    <span class="kw">void</span> <span class="fn">fly</span>();
+}
+
+<span class="kw">class</span> <span class="cl">Eagle</span> <span class="kw">implements</span> <span class="cl">FlyingBird</span> {
+    <span class="kw">public void</span> <span class="fn">eat</span>() { System.out.println(<span class="st">"Eating"</span>); }
+    <span class="kw">public void</span> <span class="fn">fly</span>() { System.out.println(<span class="st">"Soaring!"</span>); }
+}
+
+<span class="kw">class</span> <span class="cl">Penguin</span> <span class="kw">implements</span> <span class="cl">Bird</span> {
+    <span class="kw">public void</span> <span class="fn">eat</span>() { System.out.println(<span class="st">"Eating"</span>); }
+    <span class="kw">public void</span> <span class="fn">swim</span>() { System.out.println(<span class="st">"Swimming!"</span>); }
+}
+
+<span class="cm">// Safe — only FlyingBird objects passed here</span>
+<span class="kw">void</span> <span class="fn">makeFlyingBirdFly</span>(<span class="cl">FlyingBird</span> b) {
+    b.fly(); <span class="cm">// Always safe ✅</span>
+}</pre>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block good">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">GOOD — C++</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="kw">class</span> <span class="cl">Bird</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> <span class="fn">eat</span>() = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">Bird</span>() = <span class="kw">default</span>;
+};
+
+<span class="kw">class</span> <span class="cl">FlyingBird</span> : <span class="kw">public</span> <span class="cl">Bird</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> <span class="fn">fly</span>() = <span class="nm">0</span>;
+};
+
+<span class="kw">class</span> <span class="cl">Eagle</span> : <span class="kw">public</span> <span class="cl">FlyingBird</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">eat</span>() <span class="kw">override</span> { <span class="cm">/* ... */</span> }
+    <span class="kw">void</span> <span class="fn">fly</span>() <span class="kw">override</span> { <span class="cm">/* soar */</span> }
+};
+
+<span class="kw">class</span> <span class="cl">Penguin</span> : <span class="kw">public</span> <span class="cl">Bird</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">eat</span>() <span class="kw">override</span> { <span class="cm">/* ... */</span> }
+    <span class="kw">void</span> <span class="fn">swim</span>() { <span class="cm">/* swim */</span> }
+};
+
+<span class="cm">// Safe — compile-time enforced!</span>
+<span class="kw">void</span> <span class="fn">makeFly</span>(<span class="cl">FlyingBird</span>&amp; b) {
+    b.<span class="fn">fly</span>(); <span class="cm">// Always safe ✅</span>
+}</pre>
+      </div>
+      <div class="callout warn" style="align-self:center;">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Classic LSP violation to remember:</strong><br><br>
+        <code style="font-family:var(--font-code);font-size:0.82rem;">Square extends Rectangle</code> — A Square looks like it IS-A Rectangle, but if Rectangle has <code>setWidth()</code> and <code>setHeight()</code> independently, Square breaks that contract because both dimensions must always stay equal. This is a famous LSP trap!</div>
+      </div>
+    </div>
+
+    <div class="callout ok">
+      <div class="callout-icon">✅</div>
+      <div><strong>Key Takeaway:</strong> The rule of thumb — if it feels wrong to have a child throw an exception for an inherited method, your inheritance hierarchy is wrong. Rethink the abstraction.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ I — ISP ════════════════════════════════ -->
+<section class="section" id="isp">
+  <div class="section-header">
+    <div class="section-number" style="color:var(--i-color)">04</div>
+    <div class="section-title-wrap">
+      <div class="section-tag" style="color:var(--i-color)">I — Interface Segregation Principle</div>
+      <h2 class="section-title">No Client Should<br>Be Forced to Depend on Methods<br>It Doesn't Use.</h2>
+    </div>
+  </div>
+
+  <div class="principle-block">
+    <div class="principle-intro i">
+      <div class="principle-quote">"Make fine-grained interfaces that are client-specific."</div>
+      <div class="principle-explain">A fat interface forces implementing classes to provide stubs or empty bodies for methods they don't need. Break large interfaces into smaller, focused ones so each client only depends on what it actually uses.</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">🎛️</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">Imagine a TV remote with 60 buttons that every device must handle — a simple table lamp shouldn't need to implement "change channel" or "adjust bass." Give the lamp its own simple switch interface.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Fat Interface → Segregated Interfaces</div>
+      <div style="display:flex;gap:30px;justify-content:center;flex-wrap:wrap;align-items:flex-start;">
+        <div>
+          <div style="font-family:var(--font-head);font-size:0.7rem;color:#fb7185;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">❌ FAT Interface</div>
+          <div class="interface-node" style="min-width:200px;border-color:#fb7185;">
+            <div class="cn-head" style="color:#fb7185;">«interface» Worker</div>
+            <div class="cn-body">
+              <div class="cn-method">work()</div>
+              <div class="cn-method">eat()</div>
+              <div class="cn-method" style="color:#fb7185;">manageTeam() ❌</div>
+              <div class="cn-method" style="color:#fb7185;">conductReview() ❌</div>
+            </div>
+          </div>
+          <div class="arrow down" style="margin:8px auto;"><div class="line"></div><div class="head"></div></div>
+          <div class="class-node" style="border-color:#fb7185;min-width:200px;">
+            <div class="cn-head" style="color:#fb7185;">Robot implements Worker</div>
+            <div class="cn-body">
+              <div class="cn-method">work() ✓</div>
+              <div class="cn-method" style="color:#fb7185;">eat() → throws! 💥</div>
+              <div class="cn-method" style="color:#fb7185;">manageTeam() → throws! 💥</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--muted);padding-top:60px;">→</div>
+
+        <div>
+          <div style="font-family:var(--font-head);font-size:0.7rem;color:#34d399;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">✅ Segregated</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+            <div class="interface-node" style="min-width:120px;">
+              <div class="cn-head">«i» Workable</div>
+              <div class="cn-body"><div class="cn-method">work()</div></div>
+            </div>
+            <div class="interface-node" style="min-width:120px;">
+              <div class="cn-head">«i» Feedable</div>
+              <div class="cn-body"><div class="cn-method">eat()</div></div>
+            </div>
+            <div class="interface-node" style="min-width:120px;">
+              <div class="cn-head">«i» Manageable</div>
+              <div class="cn-body"><div class="cn-method">manageTeam()</div></div>
+            </div>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+            <div class="class-node" style="border-color:#34d399;min-width:140px;">
+              <div class="cn-head" style="color:#34d399;">Human</div>
+              <div class="cn-body"><div class="cn-method">Workable+Feedable</div></div>
+            </div>
+            <div class="class-node" style="border-color:#34d399;min-width:140px;">
+              <div class="cn-head" style="color:#34d399;">Robot</div>
+              <div class="cn-body"><div class="cn-method">Workable only ✓</div></div>
+            </div>
+            <div class="class-node" style="border-color:#34d399;min-width:140px;">
+              <div class="cn-head" style="color:#34d399;">Manager</div>
+              <div class="cn-body"><div class="cn-method">All three ✓</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block bad">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">BAD — Java</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// Fat interface — forces Robot to implement eat()</span>
+<span class="kw">interface</span> <span class="cl">Worker</span> {
+    <span class="kw">void</span> <span class="fn">work</span>();
+    <span class="kw">void</span> <span class="fn">eat</span>();       <span class="cm">// Robots don't eat!</span>
+    <span class="kw">void</span> <span class="fn">manageTeam</span>(); <span class="cm">// Junior devs don't manage!</span>
+}
+
+<span class="kw">class</span> <span class="cl">Robot</span> <span class="kw">implements</span> <span class="cl">Worker</span> {
+    <span class="kw">public void</span> <span class="fn">work</span>() { <span class="cm">/* OK */</span> }
+
+    <span class="kw">public void</span> <span class="fn">eat</span>() {
+        <span class="kw">throw new</span> <span class="cl">UnsupportedOperationException</span>();
+        <span class="cm">// Forced to implement but can't!</span>
+    }
+    <span class="kw">public void</span> <span class="fn">manageTeam</span>() {
+        <span class="kw">throw new</span> <span class="cl">UnsupportedOperationException</span>();
+    }
+}</pre>
+      </div>
+      <div class="code-block good">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">GOOD — Java</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// Segregated into focused interfaces</span>
+<span class="kw">interface</span> <span class="cl">Workable</span>   { <span class="kw">void</span> <span class="fn">work</span>(); }
+<span class="kw">interface</span> <span class="cl">Feedable</span>   { <span class="kw">void</span> <span class="fn">eat</span>(); }
+<span class="kw">interface</span> <span class="cl">Manageable</span> { <span class="kw">void</span> <span class="fn">manageTeam</span>(); }
+
+<span class="cm">// Robot only needs what it actually uses</span>
+<span class="kw">class</span> <span class="cl">Robot</span> <span class="kw">implements</span> <span class="cl">Workable</span> {
+    <span class="kw">public void</span> <span class="fn">work</span>() {
+        System.out.println(<span class="st">"Robot working 24/7"</span>);
+    }
+}
+
+<span class="cm">// Human uses Workable + Feedable</span>
+<span class="kw">class</span> <span class="cl">HumanWorker</span> <span class="kw">implements</span> <span class="cl">Workable</span>, <span class="cl">Feedable</span> {
+    <span class="kw">public void</span> <span class="fn">work</span>() { System.out.println(<span class="st">"Working"</span>); }
+    <span class="kw">public void</span> <span class="fn">eat</span>()  { System.out.println(<span class="st">"Eating"</span>); }
+}
+
+<span class="cm">// Manager uses all three</span>
+<span class="kw">class</span> <span class="cl">Manager</span> <span class="kw">implements</span>
+        <span class="cl">Workable</span>, <span class="cl">Feedable</span>, <span class="cl">Manageable</span> {
+    <span class="kw">public void</span> <span class="fn">work</span>()       { <span class="cm">/* ... */</span> }
+    <span class="kw">public void</span> <span class="fn">eat</span>()        { <span class="cm">/* ... */</span> }
+    <span class="kw">public void</span> <span class="fn">manageTeam</span>() { <span class="cm">/* ... */</span> }
+}</pre>
+      </div>
+    </div>
+
+    <div class="code-block good full-code-block">
+      <div class="code-block-header">
+        <div class="code-dot"></div>
+        <div class="code-block-title">GOOD — C++</div>
+        <span class="tag cpp">C++</span>
+      </div>
+      <pre><span class="kw">class</span> <span class="cl">Workable</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> <span class="fn">work</span>() = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">Workable</span>() = <span class="kw">default</span>;
+};
+
+<span class="kw">class</span> <span class="cl">Feedable</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> <span class="fn">eat</span>() = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">Feedable</span>() = <span class="kw">default</span>;
+};
+
+<span class="cm">// Robot only inherits what it needs</span>
+<span class="kw">class</span> <span class="cl">Robot</span> : <span class="kw">public</span> <span class="cl">Workable</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">work</span>() <span class="kw">override</span> { <span class="cm">/* do work */</span> }
+};
+
+<span class="cm">// Human needs work + eat</span>
+<span class="kw">class</span> <span class="cl">HumanWorker</span> : <span class="kw">public</span> <span class="cl">Workable</span>, <span class="kw">public</span> <span class="cl">Feedable</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">work</span>() <span class="kw">override</span> { <span class="cm">/* work */</span> }
+    <span class="kw">void</span> <span class="fn">eat</span>()  <span class="kw">override</span> { <span class="cm">/* eat */</span> }
+};</pre>
+    </div>
+
+    <div class="callout ok">
+      <div class="callout-icon">✅</div>
+      <div><strong>Key Takeaway:</strong> If you find yourself writing <code style="font-family:var(--font-code)">throw new UnsupportedOperationException()</code> in an implemented method, that's a red flag — your interface is too fat.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ D — DIP ════════════════════════════════ -->
+<section class="section" id="dip">
+  <div class="section-header">
+    <div class="section-number" style="color:var(--d-color)">05</div>
+    <div class="section-title-wrap">
+      <div class="section-tag" style="color:var(--d-color)">D — Dependency Inversion Principle</div>
+      <h2 class="section-title">Depend on Abstractions,<br>Not Concretions.</h2>
+    </div>
+  </div>
+
+  <div class="principle-block">
+    <div class="principle-intro d">
+      <div class="principle-quote">"High-level modules should not depend on low-level modules. Both should depend on abstractions."</div>
+      <div class="principle-explain">If your business logic class directly creates or references a specific database class, switching databases means modifying business logic — disaster! Both sides should depend on an interface/abstraction instead.</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">🔦</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">A flashlight doesn't depend on Duracell batteries specifically — it depends on the "AA battery" interface. You can swap in any brand (Energizer, Panasonic) without modifying the flashlight. The battery slot is the abstraction.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Dependency Inversion — Depend on the Interface</div>
+      <div style="display:flex;gap:40px;justify-content:center;flex-wrap:wrap;align-items:flex-start;">
+        <div>
+          <div style="font-family:var(--font-head);font-size:0.7rem;color:#fb7185;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">❌ Tightly Coupled</div>
+          <div class="class-node" style="border-color:#fb7185;min-width:190px;">
+            <div class="cn-head" style="color:#fb7185;">OrderService</div>
+            <div class="cn-body"><div class="cn-method">processOrder()</div></div>
+          </div>
+          <div class="arrow down" style="margin:8px auto;"><div class="line" style="background:#fb7185;"></div><div class="head" style="border-top-color:#fb7185;"></div></div>
+          <div style="font-size:0.7rem;color:#fb7185;text-align:center;margin-bottom:4px;">directly creates ↓</div>
+          <div class="class-node" style="border-color:#fb7185;min-width:190px;">
+            <div class="cn-head" style="color:#fb7185;">MySQLDatabase</div>
+            <div class="cn-body"><div class="cn-method">save(order)</div></div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--muted);padding-top:60px;">→</div>
+
+        <div>
+          <div style="font-family:var(--font-head);font-size:0.7rem;color:#34d399;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">✅ Inverted</div>
+          <div class="class-node" style="min-width:180px;">
+            <div class="cn-head">OrderService</div>
+            <div class="cn-body"><div class="cn-method">processOrder()</div></div>
+          </div>
+          <div class="arrow down" style="margin:8px auto;"><div class="line"></div><div class="head"></div></div>
+          <div class="interface-node" style="min-width:180px;">
+            <div class="cn-head">«interface» Database</div>
+            <div class="cn-body"><div class="cn-method">save(order)</div></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px;justify-content:center;">
+            <div>
+              <div class="arrow down" style="margin:0 auto;"><div class="line"></div><div class="head"></div></div>
+              <div class="class-node" style="border-color:#34d399;min-width:100px;">
+                <div class="cn-head" style="color:#34d399;">MySQLDB</div>
+                <div class="cn-body"><div class="cn-method">save()</div></div>
+              </div>
+            </div>
+            <div>
+              <div class="arrow down" style="margin:0 auto;"><div class="line"></div><div class="head"></div></div>
+              <div class="class-node" style="border-color:#34d399;min-width:100px;">
+                <div class="cn-head" style="color:#34d399;">MongoDB</div>
+                <div class="cn-body"><div class="cn-method">save()</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block bad">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">BAD — Java</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// High-level depends on low-level directly</span>
+<span class="kw">class</span> <span class="cl">MySQLDatabase</span> {
+    <span class="kw">public void</span> <span class="fn">save</span>(String data) {
+        System.out.println(<span class="st">"MySQL: saved"</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="cl">OrderService</span> {
+    <span class="cm">// Hard dependency on a concrete class!</span>
+    <span class="kw">private</span> <span class="cl">MySQLDatabase</span> db = <span class="kw">new</span> <span class="cl">MySQLDatabase</span>();
+
+    <span class="kw">public void</span> <span class="fn">processOrder</span>(String order) {
+        <span class="cm">// business logic...</span>
+        db.save(order);
+        <span class="cm">// Switching to MongoDB? Modify OrderService!</span>
+    }
+}</pre>
+      </div>
+      <div class="code-block good">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">GOOD — Java</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// Abstraction (interface)</span>
+<span class="kw">interface</span> <span class="cl">Database</span> {
+    <span class="kw">void</span> <span class="fn">save</span>(String data);
+}
+
+<span class="cm">// Low-level modules implement abstraction</span>
+<span class="kw">class</span> <span class="cl">MySQLDatabase</span> <span class="kw">implements</span> <span class="cl">Database</span> {
+    <span class="kw">public void</span> <span class="fn">save</span>(String data) {
+        System.out.println(<span class="st">"MySQL: saved"</span>);
+    }
+}
+<span class="kw">class</span> <span class="cl">MongoDB</span> <span class="kw">implements</span> <span class="cl">Database</span> {
+    <span class="kw">public void</span> <span class="fn">save</span>(String data) {
+        System.out.println(<span class="st">"MongoDB: saved"</span>);
+    }
+}
+
+<span class="cm">// High-level depends on abstraction only</span>
+<span class="kw">class</span> <span class="cl">OrderService</span> {
+    <span class="kw">private final</span> <span class="cl">Database</span> db; <span class="cm">// Interface!</span>
+
+    <span class="cm">// Injected from outside (Dependency Injection)</span>
+    <span class="kw">public</span> <span class="cl">OrderService</span>(<span class="cl">Database</span> db) {
+        <span class="kw">this</span>.db = db;
+    }
+    <span class="kw">public void</span> <span class="fn">processOrder</span>(String order) {
+        db.save(order); <span class="cm">// Works with ANY Database!</span>
+    }
+}
+<span class="cm">// Usage — swap DB with zero OrderService changes:
+// new OrderService(new MySQLDatabase());
+// new OrderService(new MongoDB());</span></pre>
+      </div>
+    </div>
+
+    <div class="code-block good full-code-block">
+      <div class="code-block-header">
+        <div class="code-dot"></div>
+        <div class="code-block-title">GOOD — C++</div>
+        <span class="tag cpp">C++</span>
+      </div>
+      <pre><span class="kw">class</span> <span class="cl">Database</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> <span class="fn">save</span>(<span class="kw">const</span> std::string&amp; data) = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">Database</span>() = <span class="kw">default</span>;
+};
+
+<span class="kw">class</span> <span class="cl">MySQLDatabase</span> : <span class="kw">public</span> <span class="cl">Database</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">save</span>(<span class="kw">const</span> std::string&amp; data) <span class="kw">override</span> {
+        std::cout &lt;&lt; <span class="st">"MySQL saved: "</span> &lt;&lt; data &lt;&lt; std::endl;
+    }
+};
+
+<span class="kw">class</span> <span class="cl">OrderService</span> {
+    <span class="cl">Database</span>&amp; db; <span class="cm">// Reference to abstraction</span>
+<span class="kw">public</span>:
+    <span class="cl">OrderService</span>(<span class="cl">Database</span>&amp; db) : db(db) {}
+
+    <span class="kw">void</span> <span class="fn">processOrder</span>(<span class="kw">const</span> std::string&amp; order) {
+        db.<span class="fn">save</span>(order); <span class="cm">// Works with any DB ✅</span>
+    }
+};</pre>
+    </div>
+
+    <div class="callout ok">
+      <div class="callout-icon">✅</div>
+      <div><strong>Key Takeaway:</strong> DIP is the backbone of <strong>Dependency Injection</strong> (DI) — a technique heavily used in Spring Boot (Java), Angular, and modern C++ architectures. Never use <code style="font-family:var(--font-code)">new ConcreteClass()</code> inside a high-level class; inject abstractions through constructors.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ DESIGN PATTERNS ════════════════════════════════ -->
+<section class="section" id="patterns">
+  <div class="section-header">
+    <div class="section-number" style="color:var(--accent2)">06</div>
+    <div class="section-title-wrap">
+      <div class="section-tag" style="color:var(--accent2)">Design Patterns</div>
+      <h2 class="section-title">Proven Solutions to<br>Common Problems.</h2>
+      <p class="section-desc">Design patterns are reusable blueprints for solving recurring software design challenges. They are not code — they are concepts you implement using code.</p>
+    </div>
+  </div>
+
+  <div class="dp-intro">
+    <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:12px;">What Are Design Patterns?</div>
+    <p style="color:var(--muted);font-size:0.97rem;line-height:1.8;margin-bottom:18px;">
+      In 1994, four authors (the "Gang of Four" — GoF) published <em>Design Patterns: Elements of Reusable Object-Oriented Software</em>. They catalogued 23 patterns across 3 categories. Think of patterns as a shared vocabulary among developers: instead of describing a whole architecture, you can say "use a Factory" and everyone understands.
+    </p>
+    <div class="dp-grid">
+      <div class="dp-category">
+        <div class="dp-category-name" style="color:var(--accent1);">🏗️ Creational</div>
+        <div class="dp-category-items">Singleton, Factory Method, Abstract Factory, Builder, Prototype</div>
+      </div>
+      <div class="dp-category">
+        <div class="dp-category-name" style="color:var(--accent2);">🧩 Structural</div>
+        <div class="dp-category-items">Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy</div>
+      </div>
+      <div class="dp-category">
+        <div class="dp-category-name" style="color:var(--accent4);">🔄 Behavioural</div>
+        <div class="dp-category-items">Observer, Strategy, Command, Iterator, Template Method, State…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PATTERN 1: SINGLETON ─── -->
+  <div class="pattern-block" id="singleton">
+    <div class="pattern-header">
+      <div class="pattern-icon-box">🔒</div>
+      <div>
+        <div class="pattern-title">1. Singleton Pattern</div>
+        <div class="pattern-meta">Creational · Ensures a class has only one instance</div>
+      </div>
+      <div class="pattern-solid-link" style="color:var(--s-color);border-color:rgba(247,201,72,0.3);background:rgba(247,201,72,0.06);">
+        Relates to: SRP + DIP
+      </div>
+    </div>
+
+    <div class="principle-intro" style="border-left-color:var(--accent1);">
+      <div class="principle-quote">"Ensure a class has only one instance, and provide a global point of access to it."</div>
+      <div class="principle-explain">Useful for shared resources: config managers, thread pools, loggers, connection pools. Creating multiple instances would waste resources or cause inconsistencies.</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">🌍</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">The government of a country — there's only ONE government at a time, and everyone accesses it through the same well-known entry point (the capital). You don't create a second government in parallel.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Singleton Structure</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div class="class-node" style="min-width:240px;border-color:var(--accent1);">
+          <div class="cn-head" style="color:var(--accent1);">ConfigManager (Singleton)</div>
+          <div class="cn-body">
+            <div class="cn-field">- instance: ConfigManager (static)</div>
+            <div class="cn-field">- appName: String</div>
+            <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
+              <div class="cn-method">- ConfigManager() ← private!</div>
+              <div class="cn-method">+ getInstance(): ConfigManager (static)</div>
+              <div class="cn-method">+ getConfig(key): String</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--muted);">All callers get the same instance object</div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;">
+          <div class="class-node" style="min-width:110px;">
+            <div class="cn-head">ServiceA</div>
+            <div class="cn-body"><div class="cn-method">getInstance()</div></div>
+          </div>
+          <div class="class-node" style="min-width:110px;">
+            <div class="cn-head">ServiceB</div>
+            <div class="cn-body"><div class="cn-method">getInstance()</div></div>
+          </div>
+          <div class="class-node" style="min-width:110px;">
+            <div class="cn-head">ServiceC</div>
+            <div class="cn-body"><div class="cn-method">getInstance()</div></div>
+          </div>
+        </div>
+        <div style="font-size:0.72rem;color:var(--accent1);">↑ All return the same object in memory</div>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">Java — Thread-Safe Singleton</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="kw">public class</span> <span class="cl">ConfigManager</span> {
+
+    <span class="cm">// volatile → ensures visibility across threads</span>
+    <span class="kw">private static volatile</span> <span class="cl">ConfigManager</span> instance;
+
+    <span class="cm">// private constructor → prevents new ConfigManager()</span>
+    <span class="kw">private</span> <span class="fn">ConfigManager</span>() {
+        System.out.println(<span class="st">"Loading config..."</span>);
+    }
+
+    <span class="cm">// Double-checked locking (thread-safe + fast)</span>
+    <span class="kw">public static</span> <span class="cl">ConfigManager</span> <span class="fn">getInstance</span>() {
+        <span class="kw">if</span> (instance == <span class="kw">null</span>) {
+            <span class="kw">synchronized</span> (<span class="cl">ConfigManager</span>.<span class="kw">class</span>) {
+                <span class="kw">if</span> (instance == <span class="kw">null</span>) {
+                    instance = <span class="kw">new</span> <span class="cl">ConfigManager</span>();
+                }
+            }
+        }
+        <span class="kw">return</span> instance;
+    }
+
+    <span class="kw">public</span> String <span class="fn">getDbUrl</span>() {
+        <span class="kw">return</span> <span class="st">"jdbc:mysql://localhost/mydb"</span>;
+    }
+}
+
+<span class="cm">// Usage:</span>
+<span class="cl">ConfigManager</span> cfg = <span class="cl">ConfigManager</span>.<span class="fn">getInstance</span>();
+String url = cfg.<span class="fn">getDbUrl</span>();
+<span class="cm">// ConfigManager.getInstance() always returns THE SAME object</span></pre>
+      </div>
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">C++ — Thread-Safe Singleton</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="kw">#include</span> <span class="st">&lt;mutex&gt;</span>
+<span class="kw">#include</span> <span class="st">&lt;string&gt;</span>
+<span class="kw">#include</span> <span class="st">&lt;iostream&gt;</span>
+
+<span class="kw">class</span> <span class="cl">ConfigManager</span> {
+<span class="kw">private</span>:
+    <span class="kw">static</span> <span class="cl">ConfigManager</span>* instance;
+    <span class="kw">static</span> std::mutex mtx;
+
+    <span class="cm">// Private constructor</span>
+    <span class="cl">ConfigManager</span>() {
+        std::cout &lt;&lt; <span class="st">"Loading config...\n"</span>;
+    }
+
+<span class="kw">public</span>:
+    <span class="cm">// Delete copy constructor and assignment</span>
+    <span class="cl">ConfigManager</span>(<span class="kw">const</span> <span class="cl">ConfigManager</span>&amp;) = <span class="kw">delete</span>;
+    <span class="cl">ConfigManager</span>&amp; <span class="kw">operator</span>=(<span class="kw">const</span> <span class="cl">ConfigManager</span>&amp;) = <span class="kw">delete</span>;
+
+    <span class="kw">static</span> <span class="cl">ConfigManager</span>* <span class="fn">getInstance</span>() {
+        std::lock_guard&lt;std::mutex&gt; lock(mtx);
+        <span class="kw">if</span> (!instance)
+            instance = <span class="kw">new</span> <span class="cl">ConfigManager</span>();
+        <span class="kw">return</span> instance;
+    }
+
+    std::string <span class="fn">getDbUrl</span>() {
+        <span class="kw">return</span> <span class="st">"mysql://localhost/mydb"</span>;
+    }
+};
+
+<span class="cm">// Definitions (in .cpp)</span>
+<span class="cl">ConfigManager</span>* <span class="cl">ConfigManager</span>::instance = <span class="kw">nullptr</span>;
+std::mutex <span class="cl">ConfigManager</span>::mtx;</pre>
+      </div>
+    </div>
+
+    <div class="key-insight">
+      <div class="ki-icon">🔗</div>
+      <div><strong>SOLID Link:</strong> Singleton can violate SRP if it does too much. Pair it with DIP — inject the singleton as an interface so tests can swap it out easily.</div>
+    </div>
+  </div>
+
+  <!-- ─── PATTERN 2: FACTORY METHOD ─── -->
+  <div class="pattern-block" id="factory">
+    <div class="pattern-header">
+      <div class="pattern-icon-box">🏭</div>
+      <div>
+        <div class="pattern-title">2. Factory Method Pattern</div>
+        <div class="pattern-meta">Creational · Delegates object creation to subclasses</div>
+      </div>
+      <div class="pattern-solid-link" style="color:var(--o-color);border-color:rgba(79,195,247,0.3);background:rgba(79,195,247,0.06);">
+        Relates to: OCP + DIP
+      </div>
+    </div>
+
+    <div class="principle-intro" style="border-left-color:var(--accent2);">
+      <div class="principle-quote">"Define an interface for creating an object, but let subclasses decide which class to instantiate."</div>
+      <div class="principle-explain">Instead of calling <code style="font-family:var(--font-code)">new Foo()</code> directly, you call a factory method. The caller doesn't know or care about the concrete class — it just uses the interface. Adding new types requires only a new factory, not modifying existing code (OCP).</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">🍕</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">A pizza store (creator) has a "createPizza()" factory method. The NY branch creates NY-style pizzas; the Chicago branch creates deep-dish ones. The customer just orders "a pizza" — they don't control the construction details.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Factory Method — Class Hierarchy</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="display:flex;gap:30px;flex-wrap:wrap;justify-content:center;">
+          <div class="abstract-node" style="min-width:160px;">
+            <div class="cn-head">«abstract»<br>NotificationFactory</div>
+            <div class="cn-body"><div class="cn-method">createNotification() ←abstract</div></div>
+          </div>
+          <div style="display:flex;align-items:center;">
+            <div class="h-arrow right"><div class="line"></div><div class="head"></div></div>
+          </div>
+          <div class="interface-node" style="min-width:160px;">
+            <div class="cn-head">«interface»<br>Notification</div>
+            <div class="cn-body"><div class="cn-method">send(msg)</div></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:60px;align-items:flex-start;margin-top:4px;">
+          <div class="arrow down"><div class="line"></div><div class="head"></div></div>
+          <div class="arrow down"><div class="line"></div><div class="head"></div></div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+          <div class="class-node" style="min-width:150px;">
+            <div class="cn-head">EmailFactory</div>
+            <div class="cn-body"><div class="cn-method">createNotification()<br>→ new EmailNotif()</div></div>
+          </div>
+          <div class="class-node" style="min-width:150px;">
+            <div class="cn-head">SMSFactory</div>
+            <div class="cn-body"><div class="cn-method">createNotification()<br>→ new SMSNotif()</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">Java — Factory Method</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// Product interface</span>
+<span class="kw">interface</span> <span class="cl">Notification</span> {
+    <span class="kw">void</span> <span class="fn">send</span>(String msg);
+}
+
+<span class="cm">// Concrete products</span>
+<span class="kw">class</span> <span class="cl">EmailNotification</span> <span class="kw">implements</span> <span class="cl">Notification</span> {
+    <span class="kw">public void</span> <span class="fn">send</span>(String msg) {
+        System.out.println(<span class="st">"Email: "</span> + msg);
+    }
+}
+<span class="kw">class</span> <span class="cl">SMSNotification</span> <span class="kw">implements</span> <span class="cl">Notification</span> {
+    <span class="kw">public void</span> <span class="fn">send</span>(String msg) {
+        System.out.println(<span class="st">"SMS: "</span> + msg);
+    }
+}
+
+<span class="cm">// Abstract creator</span>
+<span class="kw">abstract class</span> <span class="cl">NotificationFactory</span> {
+    <span class="kw">public abstract</span> <span class="cl">Notification</span> <span class="fn">createNotification</span>();
+
+    <span class="cm">// Template method uses factory method</span>
+    <span class="kw">public void</span> <span class="fn">notify</span>(String msg) {
+        <span class="cl">Notification</span> n = <span class="fn">createNotification</span>();
+        n.send(msg);
+    }
+}
+
+<span class="cm">// Concrete creators</span>
+<span class="kw">class</span> <span class="cl">EmailFactory</span> <span class="kw">extends</span> <span class="cl">NotificationFactory</span> {
+    <span class="kw">public</span> <span class="cl">Notification</span> <span class="fn">createNotification</span>() {
+        <span class="kw">return new</span> <span class="cl">EmailNotification</span>();
+    }
+}
+<span class="kw">class</span> <span class="cl">SMSFactory</span> <span class="kw">extends</span> <span class="cl">NotificationFactory</span> {
+    <span class="kw">public</span> <span class="cl">Notification</span> <span class="fn">createNotification</span>() {
+        <span class="kw">return new</span> <span class="cl">SMSNotification</span>();
+    }
+}
+
+<span class="cm">// Client code — decoupled from concrete classes</span>
+<span class="cl">NotificationFactory</span> factory = <span class="kw">new</span> <span class="cl">EmailFactory</span>();
+factory.notify(<span class="st">"Order confirmed!"</span>);
+<span class="cm">// Swap to SMS: new SMSFactory() — zero other changes</span></pre>
+      </div>
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">C++ — Factory Method</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="kw">class</span> <span class="cl">Notification</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> <span class="fn">send</span>(<span class="kw">const</span> std::string&amp; msg) = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">Notification</span>() = <span class="kw">default</span>;
+};
+
+<span class="kw">class</span> <span class="cl">EmailNotification</span> : <span class="kw">public</span> <span class="cl">Notification</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">send</span>(<span class="kw">const</span> std::string&amp; msg) <span class="kw">override</span> {
+        std::cout &lt;&lt; <span class="st">"Email: "</span> &lt;&lt; msg &lt;&lt; <span class="st">"\n"</span>;
+    }
+};
+
+<span class="kw">class</span> <span class="cl">NotificationFactory</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual</span> std::unique_ptr&lt;<span class="cl">Notification</span>&gt;
+    <span class="fn">createNotification</span>() = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">NotificationFactory</span>() = <span class="kw">default</span>;
+
+    <span class="kw">void</span> <span class="fn">notify</span>(<span class="kw">const</span> std::string&amp; msg) {
+        <span class="kw">auto</span> n = <span class="fn">createNotification</span>();
+        n-&gt;<span class="fn">send</span>(msg);
+    }
+};
+
+<span class="kw">class</span> <span class="cl">EmailFactory</span> : <span class="kw">public</span> <span class="cl">NotificationFactory</span> {
+<span class="kw">public</span>:
+    std::unique_ptr&lt;<span class="cl">Notification</span>&gt;
+    <span class="fn">createNotification</span>() <span class="kw">override</span> {
+        <span class="kw">return</span> std::make_unique&lt;<span class="cl">EmailNotification</span>&gt;();
+    }
+};</pre>
+      </div>
+    </div>
+
+    <div class="key-insight">
+      <div class="ki-icon">🔗</div>
+      <div><strong>SOLID Link:</strong> Factory Method enforces OCP — new product types are added via new factories without modifying existing ones. It also supports DIP since clients depend on the abstract factory and product interfaces, not concrete classes.</div>
+    </div>
+  </div>
+
+  <!-- ─── PATTERN 3: OBSERVER ─── -->
+  <div class="pattern-block" id="observer">
+    <div class="pattern-header">
+      <div class="pattern-icon-box">👁️</div>
+      <div>
+        <div class="pattern-title">3. Observer Pattern</div>
+        <div class="pattern-meta">Behavioural · One-to-many event notification</div>
+      </div>
+      <div class="pattern-solid-link" style="color:var(--i-color);border-color:rgba(52,211,153,0.3);background:rgba(52,211,153,0.06);">
+        Relates to: OCP + ISP
+      </div>
+    </div>
+
+    <div class="principle-intro" style="border-left-color:var(--accent4);">
+      <div class="principle-quote">"Define a one-to-many dependency so that when one object changes state, all dependents are notified and updated automatically."</div>
+      <div class="principle-explain">The Subject (publisher) knows nothing about its Observers (subscribers) except that they implement the Observer interface. This is the foundation of event-driven programming, reactive systems, and Java's EventListener.</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">📱</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">A YouTube channel (Subject) doesn't personally contact each subscriber when a video is uploaded. It simply notifies all subscribers at once. Subscribers (Observers) decide individually what to do — watch now, watch later, ignore.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Observer Pattern Flow</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:center;">
+          <div class="class-node" style="min-width:170px;border-color:var(--accent4);">
+            <div class="cn-head" style="color:var(--accent4);">StockMarket (Subject)</div>
+            <div class="cn-body">
+              <div class="cn-field">price: double</div>
+              <div class="cn-method">addObserver(o)</div>
+              <div class="cn-method">removeObserver(o)</div>
+              <div class="cn-method" style="color:var(--accent4);">notifyAll() ← triggers</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start;">
+            <div style="display:flex;align-items:center;gap:4px;">
+              <div class="h-arrow right"><div class="line" style="background:var(--accent4);"></div><div class="head" style="border-left-color:var(--accent4);"></div></div>
+              <div class="class-node" style="min-width:130px;">
+                <div class="cn-head">MobileApp</div>
+                <div class="cn-body"><div class="cn-method">update(price)</div></div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;">
+              <div class="h-arrow right"><div class="line" style="background:var(--accent4);"></div><div class="head" style="border-left-color:var(--accent4);"></div></div>
+              <div class="class-node" style="min-width:130px;">
+                <div class="cn-head">EmailAlert</div>
+                <div class="cn-body"><div class="cn-method">update(price)</div></div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;">
+              <div class="h-arrow right"><div class="line" style="background:var(--accent4);"></div><div class="head" style="border-left-color:var(--accent4);"></div></div>
+              <div class="class-node" style="min-width:130px;">
+                <div class="cn-head">Dashboard</div>
+                <div class="cn-body"><div class="cn-method">update(price)</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--muted);">When price changes → all observers are automatically notified</div>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">Java — Observer Pattern</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="kw">import</span> java.util.*;
+
+<span class="cm">// Observer interface</span>
+<span class="kw">interface</span> <span class="cl">Observer</span> {
+    <span class="kw">void</span> <span class="fn">update</span>(<span class="kw">double</span> price);
+}
+
+<span class="cm">// Subject interface</span>
+<span class="kw">interface</span> <span class="cl">Subject</span> {
+    <span class="kw">void</span> <span class="fn">addObserver</span>(<span class="cl">Observer</span> o);
+    <span class="kw">void</span> <span class="fn">removeObserver</span>(<span class="cl">Observer</span> o);
+    <span class="kw">void</span> <span class="fn">notifyObservers</span>();
+}
+
+<span class="cm">// Concrete Subject</span>
+<span class="kw">class</span> <span class="cl">StockMarket</span> <span class="kw">implements</span> <span class="cl">Subject</span> {
+    <span class="kw">private</span> List&lt;<span class="cl">Observer</span>&gt; observers = <span class="kw">new</span> ArrayList&lt;&gt;();
+    <span class="kw">private double</span> price;
+
+    <span class="kw">public void</span> <span class="fn">setPrice</span>(<span class="kw">double</span> price) {
+        <span class="kw">this</span>.price = price;
+        <span class="fn">notifyObservers</span>(); <span class="cm">// auto-notify on change!</span>
+    }
+    <span class="kw">public void</span> <span class="fn">addObserver</span>(<span class="cl">Observer</span> o) { observers.add(o); }
+    <span class="kw">public void</span> <span class="fn">removeObserver</span>(<span class="cl">Observer</span> o) { observers.remove(o); }
+    <span class="kw">public void</span> <span class="fn">notifyObservers</span>() {
+        observers.forEach(o -&gt; o.update(price));
+    }
+}
+
+<span class="cm">// Concrete Observers</span>
+<span class="kw">class</span> <span class="cl">MobileApp</span> <span class="kw">implements</span> <span class="cl">Observer</span> {
+    <span class="kw">public void</span> <span class="fn">update</span>(<span class="kw">double</span> price) {
+        System.out.println(<span class="st">"📱 App: Price = $"</span> + price);
+    }
+}
+<span class="kw">class</span> <span class="cl">EmailAlert</span> <span class="kw">implements</span> <span class="cl">Observer</span> {
+    <span class="kw">public void</span> <span class="fn">update</span>(<span class="kw">double</span> price) {
+        System.out.println(<span class="st">"📧 Email: Price = $"</span> + price);
+    }
+}
+
+<span class="cm">// Usage</span>
+<span class="cl">StockMarket</span> market = <span class="kw">new</span> <span class="cl">StockMarket</span>();
+market.<span class="fn">addObserver</span>(<span class="kw">new</span> <span class="cl">MobileApp</span>());
+market.<span class="fn">addObserver</span>(<span class="kw">new</span> <span class="cl">EmailAlert</span>());
+market.<span class="fn">setPrice</span>(<span class="nm">150.75</span>); <span class="cm">// Both notified automatically!</span></pre>
+      </div>
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">C++ — Observer Pattern</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="kw">#include</span> <span class="st">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="st">&lt;iostream&gt;</span>
+
+<span class="kw">class</span> <span class="cl">Observer</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> <span class="fn">update</span>(<span class="kw">double</span> price) = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">Observer</span>() = <span class="kw">default</span>;
+};
+
+<span class="kw">class</span> <span class="cl">StockMarket</span> {
+    std::vector&lt;<span class="cl">Observer</span>*&gt; observers;
+    <span class="kw">double</span> price = <span class="nm">0</span>;
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">addObserver</span>(<span class="cl">Observer</span>* o) {
+        observers.push_back(o);
+    }
+    <span class="kw">void</span> <span class="fn">setPrice</span>(<span class="kw">double</span> p) {
+        price = p;
+        <span class="kw">for</span> (<span class="kw">auto</span>* o : observers) o-&gt;<span class="fn">update</span>(price);
+    }
+};
+
+<span class="kw">class</span> <span class="cl">MobileApp</span> : <span class="kw">public</span> <span class="cl">Observer</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">update</span>(<span class="kw">double</span> price) <span class="kw">override</span> {
+        std::cout &lt;&lt; <span class="st">"App: $"</span> &lt;&lt; price &lt;&lt; <span class="st">"\n"</span>;
+    }
+};</pre>
+      </div>
+    </div>
+
+    <div class="key-insight">
+      <div class="ki-icon">🔗</div>
+      <div><strong>SOLID Link:</strong> Observer satisfies OCP — add new observers without changing the Subject. It uses ISP by defining small, focused Observer/Subject interfaces. This is how Java's <code style="font-family:var(--font-code)">EventListener</code> and Spring's <code style="font-family:var(--font-code)">ApplicationEvent</code> work internally.</div>
+    </div>
+  </div>
+
+  <!-- ─── PATTERN 4: STRATEGY ─── -->
+  <div class="pattern-block" id="strategy">
+    <div class="pattern-header">
+      <div class="pattern-icon-box">🎯</div>
+      <div>
+        <div class="pattern-title">4. Strategy Pattern</div>
+        <div class="pattern-meta">Behavioural · Swap algorithms at runtime</div>
+      </div>
+      <div class="pattern-solid-link" style="color:var(--o-color);border-color:rgba(79,195,247,0.3);background:rgba(79,195,247,0.06);">
+        Relates to: OCP + DIP
+      </div>
+    </div>
+
+    <div class="principle-intro" style="border-left-color:var(--accent2);">
+      <div class="principle-quote">"Define a family of algorithms, encapsulate each one, and make them interchangeable."</div>
+      <div class="principle-explain">Instead of hard-coding an algorithm into a class, you extract it into a strategy object. The context class delegates the work to whichever strategy it holds. You can change strategies at runtime without modifying the context.</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">🗺️</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">Google Maps lets you pick your travel strategy — car, bike, walking, or transit. The destination doesn't change; only the routing algorithm does. The app delegates routing to the chosen strategy and displays the result.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Strategy Pattern — Payment System</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+        <div class="class-node" style="min-width:200px;border-color:var(--accent2);">
+          <div class="cn-head" style="color:var(--accent2);">ShoppingCart (Context)</div>
+          <div class="cn-body">
+            <div class="cn-field">paymentStrategy: PaymentStrategy</div>
+            <div class="cn-method">setStrategy(s)</div>
+            <div class="cn-method">checkout(amount)</div>
+          </div>
+        </div>
+        <div class="arrow down" style="margin:4px auto;"><div class="line"></div><div class="head"></div></div>
+        <div class="interface-node" style="min-width:200px;">
+          <div class="cn-head">«interface» PaymentStrategy</div>
+          <div class="cn-body"><div class="cn-method">pay(amount)</div></div>
+        </div>
+        <div style="display:flex;gap:30px;align-items:flex-start;margin-top:4px;">
+          <div class="arrow down"><div class="line"></div><div class="head"></div></div>
+          <div class="arrow down"><div class="line"></div><div class="head"></div></div>
+          <div class="arrow down"><div class="line"></div><div class="head"></div></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+          <div class="class-node" style="min-width:110px;">
+            <div class="cn-head">CreditCard</div>
+            <div class="cn-body"><div class="cn-method">pay(amount)</div></div>
+          </div>
+          <div class="class-node" style="min-width:110px;">
+            <div class="cn-head">PayPal</div>
+            <div class="cn-body"><div class="cn-method">pay(amount)</div></div>
+          </div>
+          <div class="class-node" style="min-width:110px;">
+            <div class="cn-head">UPI</div>
+            <div class="cn-body"><div class="cn-method">pay(amount)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">Java — Strategy Pattern</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// Strategy interface</span>
+<span class="kw">interface</span> <span class="cl">PaymentStrategy</span> {
+    <span class="kw">void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount);
+}
+
+<span class="cm">// Concrete strategies</span>
+<span class="kw">class</span> <span class="cl">CreditCardPayment</span> <span class="kw">implements</span> <span class="cl">PaymentStrategy</span> {
+    <span class="kw">public void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount) {
+        System.out.println(<span class="st">"💳 Paid $"</span> + amount + <span class="st">" via Credit Card"</span>);
+    }
+}
+<span class="kw">class</span> <span class="cl">PayPalPayment</span> <span class="kw">implements</span> <span class="cl">PaymentStrategy</span> {
+    <span class="kw">public void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount) {
+        System.out.println(<span class="st">"🅿️ Paid $"</span> + amount + <span class="st">" via PayPal"</span>);
+    }
+}
+<span class="kw">class</span> <span class="cl">UPIPayment</span> <span class="kw">implements</span> <span class="cl">PaymentStrategy</span> {
+    <span class="kw">public void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount) {
+        System.out.println(<span class="st">"📲 Paid $"</span> + amount + <span class="st">" via UPI"</span>);
+    }
+}
+
+<span class="cm">// Context</span>
+<span class="kw">class</span> <span class="cl">ShoppingCart</span> {
+    <span class="kw">private</span> <span class="cl">PaymentStrategy</span> strategy;
+
+    <span class="kw">public void</span> <span class="fn">setPaymentStrategy</span>(<span class="cl">PaymentStrategy</span> s) {
+        <span class="kw">this</span>.strategy = s;
+    }
+    <span class="kw">public void</span> <span class="fn">checkout</span>(<span class="kw">double</span> amount) {
+        strategy.pay(amount); <span class="cm">// delegates to strategy</span>
+    }
+}
+
+<span class="cm">// Usage — swap at runtime!</span>
+<span class="cl">ShoppingCart</span> cart = <span class="kw">new</span> <span class="cl">ShoppingCart</span>();
+cart.setPaymentStrategy(<span class="kw">new</span> <span class="cl">CreditCardPayment</span>());
+cart.checkout(<span class="nm">99.99</span>); <span class="cm">// 💳 Paid $99.99 via Credit Card</span>
+
+cart.setPaymentStrategy(<span class="kw">new</span> <span class="cl">UPIPayment</span>());
+cart.checkout(<span class="nm">49.99</span>); <span class="cm">// 📲 Paid $49.99 via UPI</span></pre>
+      </div>
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">C++ — Strategy Pattern</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="kw">class</span> <span class="cl">PaymentStrategy</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount) = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">PaymentStrategy</span>() = <span class="kw">default</span>;
+};
+
+<span class="kw">class</span> <span class="cl">CreditCardPayment</span> : <span class="kw">public</span> <span class="cl">PaymentStrategy</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">pay</span>(<span class="kw">double</span> amt) <span class="kw">override</span> {
+        std::cout &lt;&lt; <span class="st">"Card: $"</span> &lt;&lt; amt &lt;&lt; <span class="st">"\n"</span>;
+    }
+};
+
+<span class="kw">class</span> <span class="cl">ShoppingCart</span> {
+    <span class="cl">PaymentStrategy</span>* strategy = <span class="kw">nullptr</span>;
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">setStrategy</span>(<span class="cl">PaymentStrategy</span>* s) {
+        strategy = s;
+    }
+    <span class="kw">void</span> <span class="fn">checkout</span>(<span class="kw">double</span> amount) {
+        <span class="kw">if</span> (strategy) strategy-&gt;<span class="fn">pay</span>(amount);
+    }
+};</pre>
+      </div>
+    </div>
+
+    <div class="key-insight">
+      <div class="ki-icon">🔗</div>
+      <div><strong>SOLID Link:</strong> Strategy embodies OCP (add new strategies without modifying the context) and DIP (context depends on the abstract PaymentStrategy, not a concrete implementation). It's commonly used in Java's <code style="font-family:var(--font-code)">Comparator</code>, sorting algorithms, and compression systems.</div>
+    </div>
+  </div>
+
+  <!-- ─── PATTERN 5: DECORATOR ─── -->
+  <div class="pattern-block" id="decorator">
+    <div class="pattern-header">
+      <div class="pattern-icon-box">🎀</div>
+      <div>
+        <div class="pattern-title">5. Decorator Pattern</div>
+        <div class="pattern-meta">Structural · Add behaviour dynamically without subclassing</div>
+      </div>
+      <div class="pattern-solid-link" style="color:var(--o-color);border-color:rgba(79,195,247,0.3);background:rgba(79,195,247,0.06);">
+        Relates to: OCP + SRP
+      </div>
+    </div>
+
+    <div class="principle-intro" style="border-left-color:var(--accent2);">
+      <div class="principle-quote">"Attach additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality."</div>
+      <div class="principle-explain">Each decorator wraps another object and adds one small behaviour. You can stack decorators like layers — adding logging, compression, encryption, or caching without touching the original class.</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">☕</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">Order a coffee at Starbucks: start with an Espresso, add a Milk decorator (+₹20), add a Sugar decorator (+₹10), add a Whip decorator (+₹15). Each topping wraps the previous and adds its cost. The base espresso never changes.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Decorator Wrapping — Coffee Example</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div class="class-node" style="min-width:260px;border-color:var(--accent3);">
+          <div class="cn-head" style="color:var(--accent3);">WhipDecorator (outermost)</div>
+          <div class="cn-body">
+            <div class="cn-field">wraps → MilkDecorator</div>
+            <div class="cn-method">getCost() → inner.getCost() + 15</div>
+          </div>
+        </div>
+        <div class="arrow down" style="margin:2px auto;"><div class="line" style="height:20px;"></div><div class="head"></div></div>
+        <div class="class-node" style="min-width:240px;border-color:var(--accent3);">
+          <div class="cn-head" style="color:var(--accent3);">MilkDecorator</div>
+          <div class="cn-body">
+            <div class="cn-field">wraps → Espresso</div>
+            <div class="cn-method">getCost() → inner.getCost() + 20</div>
+          </div>
+        </div>
+        <div class="arrow down" style="margin:2px auto;"><div class="line" style="height:20px;"></div><div class="head"></div></div>
+        <div class="class-node" style="min-width:220px;">
+          <div class="cn-head">Espresso (base)</div>
+          <div class="cn-body"><div class="cn-method">getCost() → 100</div></div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--accent3);margin-top:8px;">Total: 100 + 20 + 15 = ₹135</div>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">Java — Decorator Pattern</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// Component interface</span>
+<span class="kw">interface</span> <span class="cl">Coffee</span> {
+    String <span class="fn">getDescription</span>();
+    <span class="kw">double</span> <span class="fn">getCost</span>();
+}
+
+<span class="cm">// Concrete component</span>
+<span class="kw">class</span> <span class="cl">Espresso</span> <span class="kw">implements</span> <span class="cl">Coffee</span> {
+    <span class="kw">public</span> String <span class="fn">getDescription</span>() { <span class="kw">return</span> <span class="st">"Espresso"</span>; }
+    <span class="kw">public double</span> <span class="fn">getCost</span>() { <span class="kw">return</span> <span class="nm">100</span>; }
+}
+
+<span class="cm">// Abstract decorator</span>
+<span class="kw">abstract class</span> <span class="cl">CoffeeDecorator</span> <span class="kw">implements</span> <span class="cl">Coffee</span> {
+    <span class="kw">protected final</span> <span class="cl">Coffee</span> coffee;
+    <span class="kw">public</span> <span class="cl">CoffeeDecorator</span>(<span class="cl">Coffee</span> c) { <span class="kw">this</span>.coffee = c; }
+}
+
+<span class="cm">// Concrete decorators — each adds ONE thing</span>
+<span class="kw">class</span> <span class="cl">MilkDecorator</span> <span class="kw">extends</span> <span class="cl">CoffeeDecorator</span> {
+    <span class="kw">public</span> <span class="cl">MilkDecorator</span>(<span class="cl">Coffee</span> c) { <span class="kw">super</span>(c); }
+    <span class="kw">public</span> String <span class="fn">getDescription</span>() {
+        <span class="kw">return</span> coffee.getDescription() + <span class="st">", Milk"</span>;
+    }
+    <span class="kw">public double</span> <span class="fn">getCost</span>() { <span class="kw">return</span> coffee.getCost() + <span class="nm">20</span>; }
+}
+<span class="kw">class</span> <span class="cl">WhipDecorator</span> <span class="kw">extends</span> <span class="cl">CoffeeDecorator</span> {
+    <span class="kw">public</span> <span class="cl">WhipDecorator</span>(<span class="cl">Coffee</span> c) { <span class="kw">super</span>(c); }
+    <span class="kw">public</span> String <span class="fn">getDescription</span>() {
+        <span class="kw">return</span> coffee.getDescription() + <span class="st">", Whip"</span>;
+    }
+    <span class="kw">public double</span> <span class="fn">getCost</span>() { <span class="kw">return</span> coffee.getCost() + <span class="nm">15</span>; }
+}
+
+<span class="cm">// Usage — stack decorators!</span>
+<span class="cl">Coffee</span> order = <span class="kw">new</span> <span class="cl">Espresso</span>();        <span class="cm">// ₹100</span>
+order = <span class="kw">new</span> <span class="cl">MilkDecorator</span>(order);  <span class="cm">// ₹120</span>
+order = <span class="kw">new</span> <span class="cl">WhipDecorator</span>(order);  <span class="cm">// ₹135</span>
+System.out.println(order.getDescription()); <span class="cm">// Espresso, Milk, Whip</span>
+System.out.println(order.getCost());        <span class="cm">// 135.0</span></pre>
+      </div>
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">C++ — Decorator Pattern</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="kw">class</span> <span class="cl">Coffee</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual</span> std::string <span class="fn">getDescription</span>() = <span class="nm">0</span>;
+    <span class="kw">virtual double</span> <span class="fn">getCost</span>() = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">Coffee</span>() = <span class="kw">default</span>;
+};
+
+<span class="kw">class</span> <span class="cl">Espresso</span> : <span class="kw">public</span> <span class="cl">Coffee</span> {
+<span class="kw">public</span>:
+    std::string <span class="fn">getDescription</span>() <span class="kw">override</span> {
+        <span class="kw">return</span> <span class="st">"Espresso"</span>;
+    }
+    <span class="kw">double</span> <span class="fn">getCost</span>() <span class="kw">override</span> { <span class="kw">return</span> <span class="nm">100</span>; }
+};
+
+<span class="kw">class</span> <span class="cl">MilkDecorator</span> : <span class="kw">public</span> <span class="cl">Coffee</span> {
+    std::unique_ptr&lt;<span class="cl">Coffee</span>&gt; coffee;
+<span class="kw">public</span>:
+    <span class="cl">MilkDecorator</span>(std::unique_ptr&lt;<span class="cl">Coffee</span>&gt; c)
+        : coffee(std::move(c)) {}
+
+    std::string <span class="fn">getDescription</span>() <span class="kw">override</span> {
+        <span class="kw">return</span> coffee-&gt;<span class="fn">getDescription</span>() + <span class="st">", Milk"</span>;
+    }
+    <span class="kw">double</span> <span class="fn">getCost</span>() <span class="kw">override</span> {
+        <span class="kw">return</span> coffee-&gt;<span class="fn">getCost</span>() + <span class="nm">20</span>;
+    }
+};
+
+<span class="cm">// Usage</span>
+<span class="kw">auto</span> order = std::make_unique&lt;<span class="cl">Espresso</span>&gt;();
+order = std::make_unique&lt;<span class="cl">MilkDecorator</span>&gt;(
+    std::move(order));
+std::cout &lt;&lt; order-&gt;<span class="fn">getCost</span>(); <span class="cm">// 120</span></pre>
+      </div>
+    </div>
+
+    <div class="key-insight">
+      <div class="ki-icon">🔗</div>
+      <div><strong>SOLID Link:</strong> Decorator follows OCP — you add new behaviours (decorators) without touching the base class. Each decorator has SRP — it does exactly one thing. Java's <code style="font-family:var(--font-code)">BufferedReader</code> wrapping <code style="font-family:var(--font-code)">FileReader</code> is a classic Decorator in the JDK!</div>
+    </div>
+  </div>
+
+  <!-- ─── PATTERN 6: ADAPTER ─── -->
+  <div class="pattern-block" id="adapter">
+    <div class="pattern-header">
+      <div class="pattern-icon-box">🔌</div>
+      <div>
+        <div class="pattern-title">6. Adapter Pattern</div>
+        <div class="pattern-meta">Structural · Make incompatible interfaces work together</div>
+      </div>
+      <div class="pattern-solid-link" style="color:var(--d-color);border-color:rgba(251,113,133,0.3);background:rgba(251,113,133,0.06);">
+        Relates to: DIP + OCP
+      </div>
+    </div>
+
+    <div class="principle-intro" style="border-left-color:var(--accent5);">
+      <div class="principle-quote">"Convert the interface of a class into another interface that clients expect."</div>
+      <div class="principle-explain">Like a power adapter that lets a US plug work in a European socket — the Adapter pattern lets an existing class work with code expecting a different interface. Invaluable when integrating legacy systems or third-party libraries.</div>
+    </div>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">🗂️</div>
+      <div>
+        <div class="analogy-label">Analogy</div>
+        <div class="analogy-text">Your new music player expects audio in MP3 format. You have a legacy library that only provides WAV files. An AudioAdapter sits in between, converting WAV → MP3 so both sides remain unchanged.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">Adapter Pattern Flow</div>
+      <div style="display:flex;gap:0;align-items:center;justify-content:center;flex-wrap:wrap;row-gap:12px;">
+        <div class="class-node" style="min-width:130px;">
+          <div class="cn-head">Client</div>
+          <div class="cn-body"><div class="cn-method">uses MediaPlayer</div></div>
+        </div>
+        <div class="h-arrow right"><div class="line"></div><div class="head"></div></div>
+        <div class="interface-node" style="min-width:140px;">
+          <div class="cn-head">«i» MediaPlayer</div>
+          <div class="cn-body"><div class="cn-method">play(file)</div></div>
+        </div>
+        <div class="h-arrow right"><div class="line"></div><div class="head"></div></div>
+        <div class="class-node" style="min-width:140px;border-color:var(--accent1);">
+          <div class="cn-head" style="color:var(--accent1);">MediaAdapter ✨</div>
+          <div class="cn-body"><div class="cn-method">wraps LegacyPlayer</div><div class="cn-method">play() → legacy.playWav()</div></div>
+        </div>
+        <div class="h-arrow right"><div class="line"></div><div class="head"></div></div>
+        <div class="class-node" style="min-width:130px;border-color:#fb7185;">
+          <div class="cn-head" style="color:#fb7185;">LegacyPlayer</div>
+          <div class="cn-body"><div class="cn-method">playWav(file)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bad-good-wrap">
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">Java — Adapter Pattern</div>
+          <span class="tag java">Java</span>
+        </div>
+        <pre><span class="cm">// Target interface (what client expects)</span>
+<span class="kw">interface</span> <span class="cl">MediaPlayer</span> {
+    <span class="kw">void</span> <span class="fn">play</span>(String file);
+}
+
+<span class="cm">// Adaptee — legacy class we can't modify</span>
+<span class="kw">class</span> <span class="cl">LegacyAudioPlayer</span> {
+    <span class="kw">public void</span> <span class="fn">playWav</span>(String file) {
+        System.out.println(<span class="st">"Playing WAV: "</span> + file);
+    }
+}
+
+<span class="cm">// Adapter — bridges the gap!</span>
+<span class="kw">class</span> <span class="cl">MediaAdapter</span> <span class="kw">implements</span> <span class="cl">MediaPlayer</span> {
+    <span class="kw">private final</span> <span class="cl">LegacyAudioPlayer</span> legacyPlayer;
+
+    <span class="kw">public</span> <span class="cl">MediaAdapter</span>(<span class="cl">LegacyAudioPlayer</span> player) {
+        <span class="kw">this</span>.legacyPlayer = player;
+    }
+
+    <span class="kw">public void</span> <span class="fn">play</span>(String file) {
+        <span class="cm">// Translate: play() → playWav()</span>
+        legacyPlayer.playWav(file);
+    }
+}
+
+<span class="cm">// Client — uses MediaPlayer interface only</span>
+<span class="kw">class</span> <span class="cl">AudioApp</span> {
+    <span class="kw">private final</span> <span class="cl">MediaPlayer</span> player;
+
+    <span class="kw">public</span> <span class="cl">AudioApp</span>(<span class="cl">MediaPlayer</span> player) {
+        <span class="kw">this</span>.player = player;
+    }
+    <span class="kw">public void</span> <span class="fn">run</span>() {
+        player.play(<span class="st">"song.wav"</span>); <span class="cm">// Doesn't know about LegacyPlayer!</span>
+    }
+}
+
+<span class="cm">// Usage</span>
+<span class="cl">LegacyAudioPlayer</span> legacy = <span class="kw">new</span> <span class="cl">LegacyAudioPlayer</span>();
+<span class="cl">MediaPlayer</span> adapter = <span class="kw">new</span> <span class="cl">MediaAdapter</span>(legacy);
+<span class="kw">new</span> <span class="cl">AudioApp</span>(adapter).run(); <span class="cm">// Playing WAV: song.wav</span></pre>
+      </div>
+      <div class="code-block neutral">
+        <div class="code-block-header">
+          <div class="code-dot"></div>
+          <div class="code-block-title">C++ — Adapter Pattern</div>
+          <span class="tag cpp">C++</span>
+        </div>
+        <pre><span class="cm">// Target (expected interface)</span>
+<span class="kw">class</span> <span class="cl">MediaPlayer</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> <span class="fn">play</span>(<span class="kw">const</span> std::string&amp; f) = <span class="nm">0</span>;
+    <span class="kw">virtual</span> ~<span class="fn">MediaPlayer</span>() = <span class="kw">default</span>;
+};
+
+<span class="cm">// Adaptee — can't modify this</span>
+<span class="kw">class</span> <span class="cl">LegacyAudioPlayer</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">playWav</span>(<span class="kw">const</span> std::string&amp; f) {
+        std::cout &lt;&lt; <span class="st">"WAV: "</span> &lt;&lt; f &lt;&lt; <span class="st">"\n"</span>;
+    }
+};
+
+<span class="cm">// Adapter — translates interface</span>
+<span class="kw">class</span> <span class="cl">MediaAdapter</span> : <span class="kw">public</span> <span class="cl">MediaPlayer</span> {
+    <span class="cl">LegacyAudioPlayer</span>&amp; legacy;
+<span class="kw">public</span>:
+    <span class="cl">MediaAdapter</span>(<span class="cl">LegacyAudioPlayer</span>&amp; l) : legacy(l) {}
+
+    <span class="kw">void</span> <span class="fn">play</span>(<span class="kw">const</span> std::string&amp; f) <span class="kw">override</span> {
+        legacy.<span class="fn">playWav</span>(f); <span class="cm">// translate the call</span>
+    }
+};
+
+<span class="cm">// Client</span>
+<span class="kw">void</span> <span class="fn">runApp</span>(<span class="cl">MediaPlayer</span>&amp; p) {
+    p.<span class="fn">play</span>(<span class="st">"song.wav"</span>); <span class="cm">// ✅ Works!</span>
+}</pre>
+      </div>
+    </div>
+
+    <div class="key-insight">
+      <div class="ki-icon">🔗</div>
+      <div><strong>SOLID Link:</strong> Adapter enforces DIP (client depends on MediaPlayer abstraction, not LegacyPlayer). It enables OCP — you integrate a new third-party library via a new adapter, leaving existing code untouched. Used constantly in Spring's data access layer.</div>
+    </div>
+  </div>
+
+  <!-- ─── SUMMARY TABLE ─── -->
+  <div class="diagram">
+    <div class="diagram-title">Quick Reference — SOLID × Patterns</div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-family:var(--font-head);font-size:0.78rem;text-align:left;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border);">
+            <th style="padding:12px 16px;color:var(--muted);">Pattern</th>
+            <th style="padding:12px 16px;color:var(--muted);">Type</th>
+            <th style="padding:12px 16px;color:var(--muted);">Core Idea</th>
+            <th style="padding:12px 16px;color:var(--muted);">SOLID Links</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:12px 16px;">🔒 Singleton</td>
+            <td style="padding:12px 16px;color:var(--accent1);">Creational</td>
+            <td style="padding:12px 16px;color:var(--muted);">One instance globally</td>
+            <td style="padding:12px 16px;"><span style="color:var(--s-color);">S</span>, <span style="color:var(--d-color);">D</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:12px 16px;">🏭 Factory Method</td>
+            <td style="padding:12px 16px;color:var(--accent1);">Creational</td>
+            <td style="padding:12px 16px;color:var(--muted);">Delegate object creation</td>
+            <td style="padding:12px 16px;"><span style="color:var(--o-color);">O</span>, <span style="color:var(--d-color);">D</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:12px 16px;">👁️ Observer</td>
+            <td style="padding:12px 16px;color:var(--accent4);">Behavioural</td>
+            <td style="padding:12px 16px;color:var(--muted);">Event-driven notification</td>
+            <td style="padding:12px 16px;"><span style="color:var(--o-color);">O</span>, <span style="color:var(--i-color);">I</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:12px 16px;">🎯 Strategy</td>
+            <td style="padding:12px 16px;color:var(--accent4);">Behavioural</td>
+            <td style="padding:12px 16px;color:var(--muted);">Swap algorithms at runtime</td>
+            <td style="padding:12px 16px;"><span style="color:var(--o-color);">O</span>, <span style="color:var(--d-color);">D</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:12px 16px;">🎀 Decorator</td>
+            <td style="padding:12px 16px;color:var(--accent2);">Structural</td>
+            <td style="padding:12px 16px;color:var(--muted);">Layer behaviours dynamically</td>
+            <td style="padding:12px 16px;"><span style="color:var(--o-color);">O</span>, <span style="color:var(--s-color);">S</span></td>
+          </tr>
+          <tr>
+            <td style="padding:12px 16px;">🔌 Adapter</td>
+            <td style="padding:12px 16px;color:var(--accent2);">Structural</td>
+            <td style="padding:12px 16px;color:var(--muted);">Bridge incompatible interfaces</td>
+            <td style="padding:12px 16px;"><span style="color:var(--d-color);">D</span>, <span style="color:var(--o-color);">O</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ FOOTER ════════════════════════════════ -->
+<footer>
+  <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:8px;">
+    You've made it through SOLID! 🎉
+  </div>
+  <div style="color:var(--muted);max-width:500px;margin:0 auto 24px;">
+    These principles and patterns are the foundation every senior engineer builds upon. Practice them, and your code will thank you.
+  </div>
+  <div style="height:1px;background:var(--border);max-width:200px;margin:0 auto 24px;"></div>
+  <div>Made with <span class="heart">❤️</span> by <span class="name">Soumyadeep Das</span></div>
+</footer>
+
+</body>
+</html>
